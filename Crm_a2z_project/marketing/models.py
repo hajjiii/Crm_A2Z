@@ -19,12 +19,14 @@ class Marketing(models.Model):
     email = models.EmailField(blank=True,null=True)
     business_category = models.ForeignKey(Category,on_delete=models.SET_NULL, blank=True, null=True)
     business_name = models.CharField(max_length=50,blank=False,null=False)
-    added_on = models.DateField(auto_now=True,blank=False,null=False)
+    added_on = models.DateField(auto_now_add=True,blank=False,null=False)
     STATUS_CHOICES = (
-    ("0", "0"),
-    ("1", "1"),
+    ("Fresh", "Fresh"),
+    ("Open", "Open"),
+    ("Success", "Success"),
+    ("Closed", "Closed"),
 )
-    status = models.CharField(max_length = 20,choices=STATUS_CHOICES,default='0')
+    status = models.CharField(max_length = 20,choices=STATUS_CHOICES,default='Fresh')
 
 
 

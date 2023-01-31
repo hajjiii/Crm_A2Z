@@ -20,7 +20,8 @@ from django.conf import settings
 app_name= 'Crm_app'
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('Crm_app.urls'))
+    path('', include('Crm_app.urls')),
+    path('marketing/', include('marketing.urls'))
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL,

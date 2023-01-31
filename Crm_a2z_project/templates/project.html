@@ -431,14 +431,14 @@
 
                         
                             </li> 
-                            <li>
+                            {% comment %} <li>
                                 <a href="{% url 'Crm_app:telecaller' %}">
                                    <i class='bx bxs-grid'></i>
                                     <span key="t-apps">Telecaller</span>
                                 </a>
 
                         
-                            </li> 
+                            </li>  {% endcomment %}
                             <li>
                                 <a href="{% url 'Crm_app:client' %}">
                                    <i class='bx bxs-grid'></i>
@@ -472,6 +472,14 @@
                             
 
                             {% if user.is_authenticated and user.is_superuser %}
+                            <li>
+                                <a href="{% url 'Crm_app:listteamleader' %}">
+                                   <i class='bx bxs-grid'></i>
+                                    <span key="t-apps">Team Leader</span>
+                                </a>
+
+                        
+                            </li> 
 
                             
 
@@ -512,7 +520,7 @@
                             
 
                             {% endif %}
-
+                            
 
                         
                             

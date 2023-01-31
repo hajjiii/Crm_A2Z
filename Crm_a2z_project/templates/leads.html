@@ -431,14 +431,14 @@
 
                         
                             </li> 
-                            <li>
+                            {% comment %} <li>
                                 <a href="{% url 'Crm_app:telecaller' %}">
                                    <i class='bx bxs-grid'></i>
                                     <span key="t-apps">Telecaller</span>
                                 </a>
 
                         
-                            </li> 
+                            </li>  {% endcomment %}
                             <li>
                                 <a href="{% url 'Crm_app:client' %}">
                                    <i class='bx bxs-grid'></i>
@@ -472,6 +472,14 @@
                             
 
                             {% if user.is_authenticated and user.is_superuser %}
+                            <li>
+                                <a href="{% url 'Crm_app:listteamleader' %}">
+                                   <i class='bx bxs-grid'></i>
+                                    <span key="t-apps">Team Leader</span>
+                                </a>
+
+                        
+                            </li> 
 
                             
 
@@ -512,6 +520,7 @@
                             
 
                             {% endif %}
+                          
 
 
                             
@@ -1200,40 +1209,40 @@
 
                                                                     <div class="modal fade" id="addContactModal" tabindex="-1" aria-labelledby="addContactModalLabel" aria-hidden="true" style="display: none;">
                                                                         <div class="modal-dialog modal-lg modal-dialog-centered">
-                                                                            <form method='post'  style="width:100%"  id="LeadAddForm" data-cities-url="{% url 'Crm_app:ajax_load_cities' %}">
+                                                                            <form method='post'  style="width:100%"  id="MarketingAddForm" >
                                                                                 {% csrf_token %}
                                                                                 <div class="modal-content">
                                                                                     <div class="modal-header">
-                                                                                        <h5 class="modal-title" id="addContactModalLabel">Create Leads</h5>
+                                                                                        <h5 class="modal-title" id="addContactModalLabel">Create Marketing</h5>
                                                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                                     </div>
                                                                                     <div class="modal-body p-4">
                                                                                         <div>
                                                                                             <div class="mb-3">
-                                                                                                <label for="addcontact-designation-input" class="form-label">Category:</label>
-                                                                                                {{form.category}}
+                                                                                                <label for="addcontact-designation-input" class="form-label">Name:</label>
+                                                                                                {{form.name}}
                                                                                                 {% comment %} <input type="text" class="form-control" id="addcontact-designation-input" placeholder="Enter Designation"> {% endcomment %}
                                                                                             </div>
 
                                                                                             <div class="mb-3">
-                                                                                                <label for="addcontact-email-input" class="form-label">Lead Source:</label>
-                                                                                                {{form.lead_source}}
+                                                                                                <label for="addcontact-email-input" class="form-label">Phone Number1:</label>
+                                                                                                {{form.phoneno1}}
                                                                                                 {% comment %} <input type="email" class="form-control" id="addcontact-email-input" placeholder="Enter Email"> {% endcomment %}
                                                                                             </div>
                                                                                            
                                                                                             <div class="mb-3">
-                                                                                                <label for="addcontact-email-input" class="form-label">Lead Title:</label>
-                                                                                                {{form.title}}
+                                                                                                <label for="addcontact-email-input" class="form-label">Phone Number 2:</label>
+                                                                                                {{form.phoneno2}}
                                                                                                 {% comment %} <input type="email" class="form-control" id="addcontact-email-input" placeholder="Enter Email"> {% endcomment %}
                                                                                             </div>
                                                                                             <div class="mb-3">
-                                                                                                <label for="addcontact-email-input" class="form-label">Lead Added On:</label>
-                                                                                                {{form.date_added_on}}
+                                                                                                <label for="addcontact-email-input" class="form-label">Email:</label>
+                                                                                                {{form.email}}
                                                                                                 {% comment %} <input type="email" class="form-control" id="addcontact-email-input" placeholder="Enter Email"> {% endcomment %}
                                                                                             </div>
                                                                                          <div class="mb-3">
-                                                                                                <label for="addcontact-email-input" class="form-label">State:</label>
-                                                                                                {{form.state}}
+                                                                                                <label for="addcontact-email-input" class="form-label">Business Category:</label>
+                                                                                                {{form.business_category}}
                                                                                                 {% comment %} <input type="email" class="form-control" id="addcontact-email-input" placeholder="Enter Email"> {% endcomment %}
                                                                                             </div> 
                                                                                             {% comment %} <div class="mb-3">
@@ -1248,8 +1257,8 @@
                                                                                             </div>  {% endcomment %}
                                                                                             
                                                                                             <div class="mb-3">
-                                                                                                <label for="addcontact-email-input" class="form-label">District:</label>
-                                                                                                {{form.district}}
+                                                                                                <label for="addcontact-email-input" class="form-label">Business Name:</label>
+                                                                                                {{form.business_name}}
                                                                                                 {% comment %} <input type="email" class="form-control" id="addcontact-email-input" placeholder="Enter Email"> {% endcomment %}
                                                                                             </div>
                                                                                             {% comment %} <div class="mb-3">
@@ -1263,79 +1272,11 @@
                                                                                               
                                                                                             </div> {% endcomment %}
                                                                                             <div class="mb-3">
-                                                                                                <label for="addcontact-email-input" class="form-label">Place:</label>
-                                                                                                {{form.place}}
+                                                                                                <label for="addcontact-email-input" class="form-label">Status:</label>
+                                                                                                {{form.status}}
                                                                                                 {% comment %} <input type="email" class="form-control" id="addcontact-email-input" placeholder="Enter Email"> {% endcomment %}
                                                                                             </div>
-                                                                                            <div class="mb-3">
-                                                                                                <label for="addcontact-file-input" class="form-label">Business Name:</label>
-                                                                                             {{form.business_name}} 
-                                                                                                {% comment %} <input type="file" class="form-control" id="addcontact-file-input"> {% endcomment %}
-                                                                                            </div>
-                                                                                            <div class="mb-3">
-                                                                                                <label for="addcontact-file-input" class="form-label">Contact Person Name:</label>
-                                                                                             {{form.contact_person}} 
-                                                                                                {% comment %} <input type="file" class="form-control" id="addcontact-file-input"> {% endcomment %}
-                                                                                            </div>
-                                                                                            <div class="mb-3">
-                                                                                                <label for="addcontact-file-input" class="form-label">Contact Person Designation:</label>
-                                                                                             {{form.contact_person_designation}} 
-                                                                                                {% comment %} <input type="file" class="form-control" id="addcontact-file-input"> {% endcomment %}
-                                                                                            </div>
-                                
-                                                                                            <div class="mb-3">
-                                                                                                <label for="addcontact-email-input" class="form-label">Contact Person Phone No:</label>
-                                                                                                {{form.contact_person_number}}
-                                                                                            </div>
-                                                                                            <div class="mb-3">
-                                                                                                <label for="addcontact-email-input" class="form-label">Contact Person Email:</label>
-                                                                                                {{form.contact_person_email}}
-                                                                                                {% comment %} <input type="email" class="form-control" id="addcontact-email-input" placeholder="Enter Email"> {% endcomment %}
-                                                                                            </div>
-                                                                                            <div class="mb-3">
-                                                                                                <label for="addcontact-file-input" class="form-label">Business Owner Name:</label>
-                                                                                             {{form.business_owner_name}} 
-                                                                                                {% comment %} <input type="file" class="form-control" id="addcontact-file-input"> {% endcomment %}
-                                                                                            </div>
-                                                                                            <div class="mb-3">
-                                                                                                <label for="addcontact-email-input" class="form-label">Business Owner Phone No:</label>
-                                                                                                {{form.business_owner_number}}
-                                                                                            </div>
-                                                                                            <div class="mb-3">
-                                                                                                <label for="addcontact-email-input" class="form-label">Business Owner Email:</label>
-                                                                                                {{form.business_owner_email}}
-                                                                                                {% comment %} <input type="email" class="form-control" id="addcontact-email-input" placeholder="Enter Email"> {% endcomment %}
-                                                                                            </div>
-                                                                                            <div class="mb-3">
-                                                                                                <label for="addcontact-email-input" class="form-label">Address:</label>
-                                                                                                {{form.address}}
-                                                                                                {% comment %} <input type="email" class="form-control" id="addcontact-email-input" placeholder="Enter Email"> {% endcomment %}
-                                                                                            </div>
-                                                                                            <div class="mb-3">
-                                                                                                <label for="addcontact-email-input" class="form-label">Requirements:</label>
-                                                                                                {{form.requirements}}
-                                                                                                {% comment %} <input type="email" class="form-control" id="addcontact-email-input" placeholder="Enter Email"> {% endcomment %}
-                                                                                            </div>
-                                                                                            <div class="mb-3">
-                                                                                                <label for="addcontact-designation-input" class="form-label">Call Back Date:</label>
-                                                                                                {{form.callbackdate}}
-                                                                                                {% comment %} <input type="text" class="form-control" id="addcontact-designation-input" placeholder="Enter Designation"> {% endcomment %}
-                                                                                            </div>
-                                                                                            <div class="mb-3">
-                                                                                                <label for="addcontact-email-input" class="form-label">Interest Rate:</label>
-                                                                                                {{form.interest_rate}}
-                                                                                                {% comment %} <input type="email" class="form-control" id="addcontact-email-input" placeholder="Enter Email"> {% endcomment %}
-                                                                                            </div>
-                                                                                            <div class="mb-3">
-                                                                                                <label for="addcontact-email-input" class="form-label">Note:</label>
-                                                                                                {{form.notes}}
-                                                                                                {% comment %} <input type="email" class="form-control" id="addcontact-email-input" placeholder="Enter Email"> {% endcomment %}
-                                                                                            </div>
-                                                                                            <div class="mb-3">
-                                                                                                <label for="addcontact-email-input" class="form-label">Lead Type:</label>
-                                                                                                {{form.lead_type}}
-                                                                                                {% comment %} <input type="email" class="form-control" id="addcontact-email-input" placeholder="Enter Email"> {% endcomment %}
-                                                                                            </div>
+                                                                                           
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="modal-footer">

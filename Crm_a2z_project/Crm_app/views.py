@@ -4,7 +4,7 @@ from django.contrib.auth.models import User,auth
 from django.contrib.auth import authenticate , login 
 from django.shortcuts import redirect, render
 from .models import Client, LeadCategory, Project, ProjectAssignment, State, District,  Leads, LeadSource,ExtendedUserModel , LeadType, LeadStatus 
-from .forms import ClientViewForm, LeadAddForm, LeadEditForm, LeadViewForm, LoginForm , StatusEditForm, ClientAddForm, ProjectAddForm
+from .forms import ClientViewForm, LeadAddForm, LeadEditForm, LeadViewForm, LoginForm, ProjectAssignmentForm , StatusEditForm, ClientAddForm, ProjectAddForm, TeamleaderEditForm, TeamleaderViewForm
 from email.message import EmailMessage
 from django.http.response import JsonResponse
 from django.contrib.auth import logout
@@ -23,6 +23,7 @@ from django.conf import settings
 from django.template.loader import render_to_string
 from django.http import HttpResponse, HttpResponseRedirect
 from django.db import transaction, IntegrityError
+from cryptography.fernet import Fernet
 
 
 # Create your views here.
@@ -368,6 +369,7 @@ def project_view(request,slug):
     return render(request,'project_view.html',context)
 
 
+
 def project_edit(request,slug):
     k = str(time.time()).encode('utf-8')
     h = blake2b(key=k, digest_size=10)
@@ -429,7 +431,12 @@ def project_edit(request,slug):
         qs = Project.objects.get(slug=slug)
         form = ProjectAddForm(instance=qs)
     teammember = ExtendedUserModel.objects.filter(is_teammember='on')
-    return render(request,'project_edit.html',{'form':form,'teammember':teammember})
+    return render(request,'project_edit1.html',{'form':form,'teammember':teammember})
+   
+
+
+
+
    
 def download(request,path):
     file_path = os.path.join(settings.MEDIA_ROOT,path)
@@ -440,48 +447,6 @@ def download(request,path):
             return response
     
     raise Http404
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-def add_or_edit_view(request,slug):
-    if id is None:
-        form = ProjectAssignmentForm(request.POST or None)
-
-    elif request.method == "POST":
-        obj = ProjectAssignment.objects.filter(id=slug)
-        form = ProjectAssignmentForm(request.POST or None, instance=obj)
-        if form.is_valid():
-            form.save()
-        context ={
-            'form':form
-        }
-        return render(request, "project_edit.html", context)
-    
-
-
-
-
-
-
-
-
-
-
-
 
 
 def project_delete(request,slug):
@@ -548,6 +513,46 @@ def telecaller_detail(request):
     print(telecaller)
 
 
+def team_leader_details(request):
+    team_leader = ExtendedUserModel.objects.filter(is_teamleader ='on')
+    context = {
+        'team_leader':team_leader
+    }
+    return render(request,'teamleader.html',context)
+
+
+def team_leader_view(request,id):
+    qs = ExtendedUserModel.objects.filter(id=id).first()
+    print(qs)
+    form = TeamleaderViewForm(instance=qs)
+    context = {
+        'form':form,
+    }
+    return render(request,'teamleaderview.html',context)
+
+
+
+def team_leader_edit(request,id):
+    key = Fernet.generate_key()
+    f_obj = Fernet(key)
+    if request.method == 'POST':
+        qs = ExtendedUserModel.objects.get(id=id)
+        print(qs.user.password)
+        form = TeamleaderEditForm(request.POST,instance=qs)
+        if form.is_valid():
+            form.save()
+            return redirect('Crm_app:listteamleader')
+    else:
+        qs = ExtendedUserModel.objects.get(id=id)
+        form = TeamleaderEditForm(instance=qs)
+    return render(request,'teamleader_edit.html',{'form':form})
+        
+
+
+def teamleader_delete(request,id):
+    qs = ExtendedUserModel.objects.filter(id=id)
+    qs.delete()
+    return redirect('Crm_app:listteamleader')
 
 
 

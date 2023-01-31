@@ -193,8 +193,42 @@ class ProjectAssignmentForm(forms.ModelForm):
     class Meta:
         model = ProjectAssignment
         fields = "__all__"
-        exclude = ['document','project_assignment']
+        exclude = ['project_assignment_key','client','added_by','project',]
+        project_assignment = forms.ModelChoiceField(ExtendedUserModel.objects.filter(is_teammember='on'))
+        widgets = {
+            'message' : forms.Textarea(attrs={'class':'form-control','rows':'3'}),
+            'project_assignment':forms.SelectMultiple()
+        }
+  
 
+class TeamleaderViewForm(forms.ModelForm):
+   
+    class Meta:
+        model = ExtendedUserModel
+        fields="__all__"
+        exclude =['is_telecallers','is_teamleader','is_client','is_teammember','is_staff','is_superviser','is_designer','is_dealer','is_technician','is_factory_superviser']  
+        widgets ={
+            'user' : forms.Select(attrs={'class':'form-control','disabled':'disabled'}),
+            'blood_group' : forms.TextInput(attrs={'class':'form-control','disabled':'disabled'}),
+            'employe_name' : forms.TextInput(attrs={'class':'form-control','disabled':'disabled'}),
+            'phn_number' : forms.TextInput(attrs={'class':'form-control','disabled':'disabled'}),
+            'address' : forms.Textarea(attrs={'class':'form-control','rows':'3','disabled':'disabled'}),
+            'dob': forms.DateInput(attrs={'class': 'form-control','type': 'date','disabled':'disabled'}),
 
+        } 
 
+class TeamleaderEditForm(forms.ModelForm):
+   
+    class Meta:
+        model = ExtendedUserModel
+        fields="__all__"
+        exclude =['is_telecallers','is_teamleader','is_client','is_teammember','is_staff','is_superviser','is_designer','is_dealer','is_technician','is_factory_superviser']  
+        widgets ={
+            'user' : forms.Select(attrs={'class':'form-control',}),
+            'blood_group' : forms.TextInput(attrs={'class':'form-control'}),
+            'employe_name' : forms.TextInput(attrs={'class':'form-control'}),
+            'phn_number' : forms.TextInput(attrs={'class':'form-control'}),
+            'address' : forms.Textarea(attrs={'class':'form-control','rows':'3'}),
+            'dob': forms.DateInput(attrs={'class': 'form-control','type': 'date'}),
 
+        } 

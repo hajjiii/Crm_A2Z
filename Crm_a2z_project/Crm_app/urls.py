@@ -53,6 +53,11 @@ urlpatterns = [
     path('project-edit/<slug:slug>',views.project_edit,name='editproject'),
     path('project-delete/<slug:slug>',views.project_delete,name='deleteproject'),
     re_path(r'^download/(?P<path>.*)$',serve,{'document_root':settings.MEDIA_ROOT}),
+    path('teamleader_list',views.team_leader_details, name='listteamleader'),
+    path('team-leader-view/<int:id>',views.team_leader_view,name='viewteamleader'),
+    path('team-leader-edit/<int:id>',views.team_leader_edit,name='editteamleader'),
+    path('teamleader-delete/<int:id>',views.teamleader_delete,name='deleteteamleader'),
+
 
 
 

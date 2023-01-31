@@ -483,14 +483,14 @@
 
                         
                             </li> 
-                            <li>
+                            {% comment %} <li>
                                 <a href="{% url 'Crm_app:telecaller' %}">
                                    <i class='bx bxs-grid'></i>
                                     <span key="t-apps">Telecaller</span>
                                 </a>
 
                         
-                            </li> 
+                            </li>  {% endcomment %}
                             <li>
                                 <a href="{% url 'Crm_app:client' %}">
                                    <i class='bx bxs-grid'></i>
@@ -524,6 +524,14 @@
                             
 
                             {% if user.is_authenticated and user.is_superuser %}
+                            <li>
+                                <a href="{% url 'Crm_app:listteamleader' %}">
+                                   <i class='bx bxs-grid'></i>
+                                    <span key="t-apps">Team Leader</span>
+                                </a>
+
+                        
+                            </li> 
 
                             
 
@@ -564,6 +572,7 @@
                             
 
                             {% endif %}
+                           
 
                             
                             
@@ -663,35 +672,50 @@
                                                                
                                                             </div>
                                                             {% if user.is_authenticated and user.extendedusermodel.is_teamleader %}
-                                                            <h6>Project Assigned To:</h6>
-                                                            
-                                                            <div class="col-lg-6">
-                                                                <center>
-                                                                {% for i in teammember%} 
-                                                                <input type="checkbox"  class="chkbox" name='checkbox' value="{{i.employe_name}}">{{i.employe_name}}</input>
-                                                                {% endfor %}
-                                                                <br>
-                                                                {% comment %} <input type="text" id="chktext" name="project_assignment"> {% endcomment %}
-                                                                </center>         
-                                                            </div>
-                                                            <div class="col-lg-6">
-                                                                <label for="w3review">Message:</label>
-                                                                {% comment %} {{fm.message}} {% endcomment %}
-                                                                
-                                                                <textarea name="msg" id="" class="form-control" cols="30" rows="10"></textarea>
-                                                               
-                                                            </div>
-                                                            <div class="col-lg-6">
-                                                                <label for="w3review">Document:</label>
-                                                                <input type="file" class="form-control" name="myfile">
-                                                               
-                                                            </div>
-                                                            
-                                                       
-                                                            {% endif %}
-                                                            
+                                                            <h6>PROJECT ASIIGNED TO:</h6>
                                                            
-                                                        </div>
+                                                                <table class="table table-responsive table-borderless table-lg">
+                                                                    <thead class="text-center">
+                                                                    <tr>
+                                                                        <th>Project:</th>
+                                                                        <th>Message:</th>
+                                                                        <th>Document:</th>
+            
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    {% for form_2 in formset %}
+                                                                    <tr class="item">
+                                                                        <td style="width:165px">
+                                                                            {% for i in teammember%}
+                                                                            <label for="addcontact-email-input" class="form-label">{{i}}:</label> 
+
+                                                                            {{form_2.project_assignment}}
+                                                                           {% endfor %}                          
+
+                                                                        </td>
+                                                                        <td  style="width:165px" >
+                                                                            {{form_2.message}}
+                                                                          
+                                                                        </td>
+                                                                        <td  style="width:165px">
+                                                                            {{form_2.document}}
+
+                                                                           
+                                                                        </td>
+                                                                       
+                                                                        {{ form_data.id }}
+                                                                        
+                                                                    </tr>
+                                                                    {% endfor %}
+                                                                    <tr>
+                                                                        
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                                {{ formset.management_form }}
+
+                                                            {% endif %}
                                                         <div class="row mt-3"id="row">
                                                          
                                                         <div class="col-lg-6">
