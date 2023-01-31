@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Crm_app',
     'widget_tweaks',
+    'marketing'
 ]
 
 MIDDLEWARE = [
