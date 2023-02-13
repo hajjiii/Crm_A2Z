@@ -16,7 +16,7 @@ def marketing(request):
     else:
         form = MarketingAddForm()
     
-    marketing =Marketing.objects.all()
+    marketing =Marketing.objects.filter(status='Fresh').order_by('-added_on')
     # marketing = Marketing.objects.filter(added_on__lt=d)
     context = {
         'form':form,
@@ -50,6 +50,34 @@ def marketing_edit(request,eid):
         qs = Marketing.objects.get(id=eid)
         form = MarketingAddForm(instance=qs)
     return render(request,'marketing_edit.html',{'form':form})
+
+
+def open_marketing(request):
+    open = Marketing.objects.filter(status='Open')
+    context = {
+        'open':open
+    }
+    return render(request,'openmarketing.html',context)
+
+
+
+def success_marketing(request):
+    success = Marketing.objects.filter(status='Success')
+    context = {
+        'success':success
+    }
+    return render(request,'successmarketing.html',context)
+
+
+def closed_marketing(request):
+    closed = Marketing.objects.filter(status='Closed')
+    context = {
+        'closed':closed
+    }
+    return render(request,'closedmarketing.html',context)
+
+
+
 
 def contact_client(request):
     dy = tz.now() - datetime.timedelta(days=3)

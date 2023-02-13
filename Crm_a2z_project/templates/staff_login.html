@@ -73,7 +73,7 @@
                                     {% csrf_token %}
                                     <div class="form-floating form-floating-custom mb-3">
                                         {% comment %} {{form.as_p}} {% endcomment %}
-                                        {% render_field form.username class="formcontrol"|append_attr:"readonly:readonly" type="text" placeholder="Employee Id" %}
+                                        {% render_field form.username class="formcontrol"|append_attr:"readonly:readonly" type="text" placeholder="Employee Id" id="username" %}
                                         <div class="mt-2"></div>
                                         {% render_field form.password class="formcontrol"|append_attr:"readonly:readonly" type="password" placeholder="Password" id="password" %}
 
@@ -166,6 +166,41 @@
         <script src="{% static 'assets2/libs/metismenujs/metismenujs.min.js' %}"></script>
         <script src="{% static 'assets2/libs/simplebar/simplebar.min.js' %}"></script>
         <script src="{% static 'assets2/libs/feather-icons/feather.min.js' %}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script>
+            $("#btn1").click(function(e){
+                e.preventDefault();
+                var username = $('#username').val()
+                var password = $('#password').val()
+                var data ={
+                    'csrfmiddlewaretoken':'{{csrf_token}}',
+                    'username':username,
+                    'password':password
+                    
+                }
+                if(username == ''){
+                    alert('Enter valid username')
+                }else if(password == ''){
+                    alert('Enter valid Password')
+                }else
+                {
+                $.ajax({
+                    url:'/',
+                    method:"POST",
+                    data :data,
+                    dataType:'json',
+                    success:function(data){
+                        if(data.success){
+                            window.location.replace('index')
+                        }else{
+                            alert('User is not authenticated')
+                        }
+                    }
+                })
+            }
+    
+            })
+        </script>
 
     </body>
 

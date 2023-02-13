@@ -85,19 +85,19 @@
                         <div class="navbar-brand-box">
                             <a href="#" class="logo logo-dark">
                                 <span class="logo-sm">
-                                    <img src="{% static 'assets/images/logo-dark.png' %}" alt="logo-sm" height="22">
+                                    <img src="{% static 'assets/images/As_logopng.png' %}" alt="logo-sm" height="22">
                                 </span>
                                 <span class="logo-lg">
-                                    <img src="{% static 'assets/images/logo-dark.png' %}" alt="logo-dark" height="23">
+                                    <img src="{% static 'assets/images/As_logopng.png' %}" alt="logo-dark" height="23">
                                 </span>
                             </a>
 
                             <a href="#" class="logo logo-light">
                                 <span class="logo-sm">
-                                    <img src="{% static 'assets/images/atlas-logo-small.png' %}" alt="logo-sm-light" height="22">
+                                    <img src="{% static 'assets/images/As_logopng.png' %}" alt="logo-sm-light" height="22">
                                 </span>
                                 <span class="logo-lg">
-                                    <img src="{% static 'assets/images/atlas-logo.png' %}" alt="logo-light" height="23">
+                                    <img src="{% static 'assets/images/As_logopng.png' %}" alt="logo-light" height="23">
                                 </span>
                             </a>
                         </div>
@@ -218,7 +218,7 @@
                                 <!-- item-->
                                 <h6 class="dropdown-header"></h6>
                                 {% if user.is_authenticated and user.is_superuser %}
-                                <a class="dropdown-item" href="#"><span class="align-middle" key="t-logout">Admin Register</span></a>
+                                <a class="dropdown-item" href="{% url 'Crm_app:admin_register' %}"><span class="align-middle" key="t-logout">Admin Register</span></a>
                                 <a class="dropdown-item" href="{% url 'Crm_app:staff_register' %}"> <span class="align-middle" key="t-logout">Staff Register</span></a>
                                 {% endif %}
                             <a class="dropdown-item" href="{% url 'Crm_app:logout' %}"><i class="mdi mdi-logout text-muted font-size-16 align-middle me-1"></i> <span class="align-middle" key="t-logout">Logout</span></a>
@@ -422,6 +422,14 @@
 
                         
                             </li> 
+                            <li>
+                                <a href="{% url 'Crm_app:closedlead' %}">
+                                   <i class='bx bxs-grid'></i>
+                                    <span key="t-apps">Closed Leads</span>
+                                </a>
+
+                        
+                            </li> 
                             {% comment %} <li>
                                 <a href="{% url 'Crm_app:telecaller' %}">
                                    <i class='bx bxs-grid'></i>
@@ -567,16 +575,16 @@
                                                 <div class="d-flex justify-content-between">
                                                     <div>
                                                         <h6 class="font-size-xs text-uppercase">Total Leads</h6>
-                                                        <h4 class="mt-4 font-weight-bold mb-2 d-flex align-items-center">
-                                                            {{total_leadss}}
-                                                        </h4>
+                                                        
                                                         {% comment %} <div class="text-muted">Earning this month</div> {% endcomment %}
                                                     </div>
                                                     <div>
                                                         <div class="float-end">
                                                             <div class="avatar-sm mx-auto mb-4">
                                                                 <span class="avatar-title rounded-circle bg-light font-size-24">
-                                                                    <i class="mdi mdi-cash-multiple text-primary"></i>
+                                                                    <h4 class="mt-4 font-weight-bold mb-2 d-flex align-items-center">
+                                                                        {{total_leads_count}}
+                                                                    </h4>
                                                                 </span>
                                                             </div>
                                                         </div>
@@ -593,16 +601,17 @@
                                                 <div class="d-flex justify-content-between">
                                                     <div>
                                                         <h6 class="font-size-xs text-uppercase">Today Leads</h6>
-                                                        <h4 class="mt-4 font-weight-bold mb-2 d-flex align-items-center">
-                                                            {{today_leadss}}
-                                                        </h4>
+                                                        
                                                     </div>
                                                     <div>
                                                         <div class="float-end">
                                                             <div class="avatar-sm mx-auto mb-4">
                                                                 <span class="avatar-title rounded-circle bg-light font-size-24">
-                                                                    <i class="mdi mdi-cash-multiple text-primary"></i>
+                                                                    <h4 class="mt-4 font-weight-bold mb-2 d-flex align-items-center">
+                                                                        {{today_leads_count}}
+                                                                    </h4>                                                                
                                                                 </span>
+                                                                
                                                             </div>
                                                         </div>
                                                     </div>
@@ -618,16 +627,15 @@
                                                 <div class="d-flex justify-content-between">
                                                     <div>
                                                         <h6 class="font-size-xs text-uppercase">Total Closed Leads</h6>
-                                                        <h4 class="mt-4 font-weight-bold mb-2 d-flex align-items-center">
-                                                            {{total_closed_leadss}}
-                                                        </h4>
+                                                        
                                                     </div>
                                                     <div>
                                                         <div class="float-end">
                                                             <div class="avatar-sm mx-auto mb-4">
                                                                 <span class="avatar-title rounded-circle bg-light font-size-24">
-                                                                    <i class="mdi mdi-cash-multiple text-primary"></i>
-                                                                </span>
+                                                                    <h4 class="mt-4 font-weight-bold mb-2 d-flex align-items-center">
+                                                                        {{total_closed_count}}
+                                                                    </h4>                                                                </span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -643,16 +651,15 @@
                                                 <div class="d-flex justify-content-between">
                                                     <div>
                                                         <h6 class="font-size-xs text-uppercase">Today Closed Leads</h6>
-                                                        <h4 class="mt-4 font-weight-bold mb-2 d-flex align-items-center">
-                                                            {{today_closed_leadss}}
-                                                        </h4>
+                                                        
                                                     </div>
                                                     <div>
                                                         <div class="float-end">
                                                             <div class="avatar-sm mx-auto mb-4">
                                                                 <span class="avatar-title rounded-circle bg-light font-size-24">
-                                                                    <i class="mdi mdi-cash-multiple text-primary"></i>
-                                                                </span>
+                                                                    <h4 class="mt-4 font-weight-bold mb-2 d-flex align-items-center">
+                                                                        {{today_closed_leads_count}}
+                                                                    </h4>                                                                </span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -721,16 +728,16 @@
                                                 <div class="d-flex justify-content-between">
                                                     <div>
                                                         <h6 class="font-size-xs text-uppercase">Total Leads</h6>
-                                                        <h4 class="mt-4 font-weight-bold mb-2 d-flex align-items-center">
-                                                            {{total_leads}}
-                                                        </h4>
+                                                        
                                                         {% comment %} <div class="text-muted">Earning this month</div> {% endcomment %}
                                                     </div>
                                                     <div>
                                                         <div class="float-end">
                                                             <div class="avatar-sm mx-auto mb-4">
                                                                 <span class="avatar-title rounded-circle bg-light font-size-24">
-                                                                    <i class="mdi mdi-cash-multiple text-primary"></i>
+                                                                    <h4 class="mt-4 font-weight-bold mb-2 d-flex align-items-center">
+                                                                        {{total_leads_count}}
+                                                                    </h4>   
                                                                 </span>
                                                             </div>
                                                         </div>
@@ -747,15 +754,15 @@
                                                 <div class="d-flex justify-content-between">
                                                     <div>
                                                         <h6 class="font-size-xs text-uppercase">Today Leads</h6>
-                                                        <h4 class="mt-4 font-weight-bold mb-2 d-flex align-items-center">
-                                                            {{today_leads}}
-                                                        </h4>
+                                                        
                                                     </div>
                                                     <div>
                                                         <div class="float-end">
                                                             <div class="avatar-sm mx-auto mb-4">
                                                                 <span class="avatar-title rounded-circle bg-light font-size-24">
-                                                                    <i class="mdi mdi-cash-multiple text-primary"></i>
+                                                                    <h4 class="mt-4 font-weight-bold mb-2 d-flex align-items-center">
+                                                                        {{today_leads_count}}
+                                                                    </h4>                                                                
                                                                 </span>
                                                             </div>
                                                         </div>
@@ -772,16 +779,15 @@
                                                 <div class="d-flex justify-content-between">
                                                     <div>
                                                         <h6 class="font-size-xs text-uppercase">Closed Leads</h6>
-                                                        <h4 class="mt-4 font-weight-bold mb-2 d-flex align-items-center">
-                                                            {{closed_leads}}
-                                                        </h4>
+                                                       
                                                     </div>
                                                     <div>
                                                         <div class="float-end">
                                                             <div class="avatar-sm mx-auto mb-4">
                                                                 <span class="avatar-title rounded-circle bg-light font-size-24">
-                                                                    <i class="mdi mdi-cash-multiple text-primary"></i>
-                                                                </span>
+                                                                    <h4 class="mt-4 font-weight-bold mb-2 d-flex align-items-center">
+                                                                        {{total_closed_count}}
+                                                                    </h4>                                                                </span>
                                                             </div>
                                                         </div>
                                                     </div>

@@ -9,6 +9,11 @@ urlpatterns = [
     path('marketing-edit/<int:eid>',views.marketing_edit,name='edit'),
     path('contact-client',views.contact_client,name='contact_client'),
     path('contact-client1',views.contact_client1,name='contact_clientt'),
+    path('open-marketing',views.open_marketing,name='openmarketing'),
+    path('success-marketing',views.success_marketing,name='successmarketing'),
+    path('closed-marketing',views.closed_marketing,name='closedmarketing'),
+
+
 
 
 

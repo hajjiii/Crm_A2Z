@@ -174,19 +174,19 @@
                         <div class="navbar-brand-box">
                             <a href="#" class="logo logo-dark">
                                 <span class="logo-sm">
-                                    <img src="{% static 'assets/images/logo-dark.png' %}" alt="logo-sm" height="22">
+                                    <img src="{% static 'assets/images/As_logopng.png' %}" alt="logo-sm" height="22">
                                 </span>
                                 <span class="logo-lg">
-                                    <img src="{% static 'assets/images/logo-dark.png' %}" alt="logo-dark" height="23">
+                                    <img src="{% static 'assets/images/As_logopng.png' %}" alt="logo-dark" height="23">
                                 </span>
                             </a>
 
                             <a href="#" class="logo logo-light">
                                 <span class="logo-sm">
-                                    <img src="{% static 'assets/images/atlas-logo-small.png' %}" alt="logo-sm-light" height="22">
+                                    <img src="{% static 'assets/images/As_logopng.png' %}" alt="logo-sm-light" height="22">
                                 </span>
                                 <span class="logo-lg">
-                                    <img src="{% static 'assets/images/atlas-logo.png' %}" alt="logo-light" height="23">
+                                    <img src="{% static 'assets/images/As_logopng.png' %}" alt="logo-light" height="23">
                                 </span>
                             </a>
                         </div>
@@ -359,6 +359,14 @@
                                 <a href="{% url 'Crm_app:runninglead' %}">
                                    <i class='bx bxs-grid'></i>
                                     <span key="t-apps">Running Leads</span>
+                                </a>
+
+                        
+                            </li> 
+                            <li>
+                                <a href="{% url 'Crm_app:closedlead' %}">
+                                   <i class='bx bxs-grid'></i>
+                                    <span key="t-apps">Closed Leads</span>
                                 </a>
 
                         
@@ -1019,39 +1027,24 @@
                                                         <div class="row">
                                                             <div class="col-lg-12">
                                                                 <div class="">
-                                                                    <form method="get" >
-                                                                        <div class="row">
-
-                                                                                     
-                                                                                    <div class=" col-lg-2 col-12 col-sm-12 col-md-2">
-                                                                                        {{ filters.form.showroom.label_tag }}
-                                                                                        {% render_field filters.form.showroom class="form-control" %}
-                                                                                      </div>
-                                                                                      <div class=" col-lg-2 col-12 col-sm-12 col-md-2">
-                                                                                        {{ filters.form.deals.label_tag }}
-                                                                                        {% render_field filters.form.deals class="form-control" %}
-                                                                                      </div>
-                                                                                      <div class=" col-lg-2 col-12 col-sm-12 col-md-2">
-                                                                                        {{ filters.form.designer.label_tag }}
-                                                                                        {% render_field filters.form.designer class="form-control" %}
-                                                                                      </div>
-                                                                                      <div class=" col-lg-2 col-12 col-sm-12 col-md-2">
-                                                                                        {{ filters.form.open_lead_status.label_tag }}
-                                                                                        {% render_field filters.form.open_lead_status class="form-control" %}
-                                                                                      </div>
-                                                                                      <div class="col-lg-1  col-12 col-sm-12 col-md-1">
-                                                                                        {{ filters.form.lead_source.label_tag }}
-                                                                                        {% render_field filters.form.lead_source class="form-control" %}
-                                                                                      </div>
-                                                                                      
-
-
-                                                                                 
-                                                                              
-                                                                          
+                                                                    <form method="get" class="app-search d-none d-lg-block" action="#">
+                                                                        <div class="input-group">
+                                                                            <div class="form-outline">
+                                                                                {{filters.form.title.label_tag}}    
+                                                                                {% render_field filters.form.title class="form-control"%}                                                                        
+                                                                            </div>
+                                                                            <div class=" col-lg-2 col-12 col-sm-12 col-md-2">
+                                                                                {{ filters.form.contact_person.label_tag }}
+                                                                                {% render_field filters.form.contact_person class="form-control" %}
+                                                                            </div>
+                                                                            <div class="col-lg-2 col-12 col-sm-12 col-md-2">
+                                                                                <label style="margin-top:17px ;"></label>
+                                                                                 <button type="submit" class="btn btn-dark" id="search-btn">Search</button>
+                                                                            </div>
                                                                         </div>
-                                                                        
                                                                     </form>
+
+                                                                    
                                                                     <div class="cardbody">
                                                                         <div id="table-gridjs"><div role="complementary" class="gridjs gridjs-container" style="width: 100%;"><div class="gridjs-head"><div class="gridjs-search"></div></div><div class="gridjs-wrapper" style="height: auto;"><table role="grid" class="gridjs-table" style="height: auto;">
                                                                             <thead class="gridjs-thead">
@@ -1064,7 +1057,7 @@
                                                                                     <th data-column-id="country" class="gridjs-th gridjs-th-sort" tabindex="0" style="min-width: 116px; width: 130px;"><div class="gridjs-th-content">Action</div><button tabindex="-1" aria-label="Sort column ascending" title="Sort column ascending" class="gridjs-sort gridjs-sort-neutral"></button></th>
                                                                                 </tr>
                                                                             </thead>
-                                                                            {% for i in open_leadss %} 
+                                                                            {% for i in filters.qs %} 
                                                                             <tbody class="gridjs-tbody">  
                                                                                 <tr class="gridjs-tr">
                                                                                     <td data-column-id="position" class="gridjs-td"> {{i.title}}</td>
@@ -1141,7 +1134,7 @@
                                                                                     <th data-column-id="country" class="gridjs-th gridjs-th-sort" tabindex="0" style="min-width: 116px; width: 130px;"><div class="gridjs-th-content">Action</div><button tabindex="-1" aria-label="Sort column ascending" title="Sort column ascending" class="gridjs-sort gridjs-sort-neutral"></button></th>                                                                                    
                                                                                 </tr>
                                                                             </thead>
-                                                                            {% for i in open_leadss %} 
+                                                                            {% for i in filters.qs %} 
                                                                             <tbody class="gridjs-tbody">
                                                                                 <tr class="gridjs-tr">
                                                                                     <td data-column-id="position" class="gridjs-td"> {{i.title}}</td>

@@ -310,19 +310,19 @@
                         <div class="navbar-brand-box">
                             <a href="#" class="logo logo-dark">
                                 <span class="logo-sm">
-                                    <img src="{% static 'assets/images/logo-sm.png' %}" alt="logo-sm" height="22">
+                                    <img src="{% static 'assets/images/As_logopng.png' %}" alt="logo-sm" height="22">
                                 </span>
                                 <span class="logo-lg">
-                                    <img src="{% static 'assets/images/logo-dark.png' %}" alt="logo-dark" height="23">
+                                    <img src="{% static 'assets/images/As_logopng.png' %}" alt="logo-dark" height="23">
                                 </span>
                             </a>
 
                             <a href="#" class="logo logo-light">
                                 <span class="logo-sm">
-                                    <img src="{% static 'assets/images/atlas-logo-small.png' %}" alt="logo-sm-light" height="22">
+                                    <img src="{% static 'assets/images/As_logopng.png' %}" alt="logo-sm-light" height="22">
                                 </span>
                                 <span class="logo-lg">
-                                    <img src="{% static 'assets/images/atlas-logo.png' %}" alt="logo-light" height="23">
+                                    <img src="{% static 'assets/images/As_logopng.png' %}" alt="logo-light" height="23">
                                 </span>
                             </a>
                         </div>
@@ -479,6 +479,14 @@
                                 <a href="{% url 'Crm_app:runninglead' %}">
                                    <i class='bx bxs-grid'></i>
                                     <span key="t-apps">Running Leads</span>
+                                </a>
+
+                        
+                            </li> 
+                            <li>
+                                <a href="{% url 'Crm_app:closedlead' %}">
+                                   <i class='bx bxs-grid'></i>
+                                    <span key="t-apps">Closed Leads</span>
                                 </a>
 
                         
@@ -672,12 +680,12 @@
                                                                
                                                             </div>
                                                             {% if user.is_authenticated and user.extendedusermodel.is_teamleader %}
-                                                            <h6>PROJECT ASIIGNED TO:</h6>
+                                                            <h6>PROJECT ASSIGNED TO:</h6>
                                                            
                                                                 <table class="table table-responsive table-borderless table-lg">
                                                                     <thead class="text-center">
                                                                     <tr>
-                                                                        <th>Project:</th>
+                                                                        <th>Team Members:</th>
                                                                         <th>Message:</th>
                                                                         <th>Document:</th>
             
@@ -686,13 +694,35 @@
                                                                     <tbody>
                                                                     {% for form_2 in formset %}
                                                                     <tr class="item">
-                                                                        <td style="width:165px">
-                                                                            {% for i in teammember%}
+                                                                        {% comment %} <td  style="width:165px" >
+                                                                            {% comment %} {{form_2.project_assignment}} {% endcomment %}
+                                                                            {% comment %} <center>
+                                                                                {% for i in teammember%} 
+                                                                                <input type="checkbox"  class="chkbox" name='checkbox' value="{{i.employe_name}}">{{i.employe_name}}</input>
+                                                                                {% endfor %}
+                                                                                <br> 
+                                                                              
+                                                                            </center>
+                                                                        </td> {% endcomment %}
+                                                                        {% comment %} <div class="col-lg-6"> {% endcomment %}
+                                                                            {% comment %} <center>
+                                                                            {% for i in teammember%} 
+                                                                            <input type="checkbox"  class="chkbox" name='checkbox' value="{{i.employe_name}}">{{i.employe_name}}</input>
+                                                                            {% endfor %}
+                                                                            <br>
+                                                                            {% comment %} <input type="text" id="chktext" name="project_assignment"> {% endcomment %}
+                                                                            {% comment %} </center> {% endcomment %}
+                                                                        {% comment %} <td style="width:165px">
+                                                                            {% comment %} {% for i in teammember%}
                                                                             <label for="addcontact-email-input" class="form-label">{{i}}:</label> 
 
                                                                             {{form_2.project_assignment}}
                                                                            {% endfor %}                          
 
+                                                                        </td> {% endcomment %} 
+                                                                        <td  style="width:165px" >
+                                                                            {{form_2.project_assignment}}
+                                                                          
                                                                         </td>
                                                                         <td  style="width:165px" >
                                                                             {{form_2.message}}
@@ -704,7 +734,7 @@
                                                                            
                                                                         </td>
                                                                        
-                                                                        {{ form_data.id }}
+                                                                        {% comment %} {{ form_data.id }} {% endcomment %}
                                                                         
                                                                     </tr>
                                                                     {% endfor %}
@@ -714,6 +744,11 @@
                                                                     </tbody>
                                                                 </table>
                                                                 {{ formset.management_form }}
+                                                                {% for form_data in formset %}
+                                                                {% for hidden in form_data.hidden_fields %}
+                                                                {{ hidden }}
+                                                                {% endfor %}
+                                                                {% endfor %}
 
                                                             {% endif %}
                                                         <div class="row mt-3"id="row">

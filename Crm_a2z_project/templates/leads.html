@@ -1,3 +1,4 @@
+{% load widget_tweaks %}
 {% load static %}
 <!doctype html>
 <html lang="en">
@@ -242,19 +243,19 @@
                         <div class="navbar-brand-box">
                             <a href="#" class="logo logo-dark">
                                 <span class="logo-sm">
-                                    <img src="{% static 'assets/images/logo-dark.png' %}" alt="logo-sm" height="22">
+                                    <img src="{% static 'assets/images/As_logopng.png' %}" alt="logo-sm" height="22">
                                 </span>
                                 <span class="logo-lg">
-                                    <img src="{% static 'assets/images/logo-dark.png' %}" alt="logo-dark" height="23">
+                                    <img src="{% static 'assets/images/As_logopng.png' %}" alt="logo-dark" height="23">
                                 </span>
                             </a>
 
                             <a href="#" class="logo logo-light">
                                 <span class="logo-sm">
-                                    <img src="{% static 'assets/images/atlas-logo-small.png' %}" alt="logo-sm-light" height="22">
+                                    <img src="{% static 'assets/images/As_logopng.png' %}" alt="logo-sm-light" height="22">
                                 </span>
                                 <span class="logo-lg">
-                                    <img src="{% static 'assets/images/atlas-logo.png' %}" alt="logo-light" height="23">
+                                    <img src="{% static 'assets/images/As_logopng.png' %}" alt="logo-light" height="23">
                                 </span>
                             </a>
                         </div>
@@ -427,6 +428,14 @@
                                 <a href="{% url 'Crm_app:runninglead' %}">
                                    <i class='bx bxs-grid'></i>
                                     <span key="t-apps">Running Leads</span>
+                                </a>
+
+                        
+                            </li> 
+                            <li>
+                                <a href="{% url 'Crm_app:closedlead' %}">
+                                   <i class='bx bxs-grid'></i>
+                                    <span key="t-apps">Closed Leads</span>
                                 </a>
 
                         
@@ -1209,40 +1218,40 @@
 
                                                                     <div class="modal fade" id="addContactModal" tabindex="-1" aria-labelledby="addContactModalLabel" aria-hidden="true" style="display: none;">
                                                                         <div class="modal-dialog modal-lg modal-dialog-centered">
-                                                                            <form method='post'  style="width:100%"  id="MarketingAddForm" >
+                                                                            <form method='post'  style="width:100%"  id="LeadAddForm" data-cities-url="{% url 'Crm_app:ajax_load_cities' %}">
                                                                                 {% csrf_token %}
                                                                                 <div class="modal-content">
                                                                                     <div class="modal-header">
-                                                                                        <h5 class="modal-title" id="addContactModalLabel">Create Marketing</h5>
+                                                                                        <h5 class="modal-title" id="addContactModalLabel">Create Leads</h5>
                                                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                                     </div>
                                                                                     <div class="modal-body p-4">
                                                                                         <div>
                                                                                             <div class="mb-3">
-                                                                                                <label for="addcontact-designation-input" class="form-label">Name:</label>
-                                                                                                {{form.name}}
+                                                                                                <label for="addcontact-designation-input" class="form-label">Category:</label>
+                                                                                                {{form.category}}
                                                                                                 {% comment %} <input type="text" class="form-control" id="addcontact-designation-input" placeholder="Enter Designation"> {% endcomment %}
                                                                                             </div>
 
                                                                                             <div class="mb-3">
-                                                                                                <label for="addcontact-email-input" class="form-label">Phone Number1:</label>
-                                                                                                {{form.phoneno1}}
+                                                                                                <label for="addcontact-email-input" class="form-label">Lead Source:</label>
+                                                                                                {{form.lead_source}}
                                                                                                 {% comment %} <input type="email" class="form-control" id="addcontact-email-input" placeholder="Enter Email"> {% endcomment %}
                                                                                             </div>
                                                                                            
                                                                                             <div class="mb-3">
-                                                                                                <label for="addcontact-email-input" class="form-label">Phone Number 2:</label>
-                                                                                                {{form.phoneno2}}
+                                                                                                <label for="addcontact-email-input" class="form-label">Lead Title:</label>
+                                                                                                {{form.title}}
                                                                                                 {% comment %} <input type="email" class="form-control" id="addcontact-email-input" placeholder="Enter Email"> {% endcomment %}
                                                                                             </div>
                                                                                             <div class="mb-3">
-                                                                                                <label for="addcontact-email-input" class="form-label">Email:</label>
-                                                                                                {{form.email}}
+                                                                                                <label for="addcontact-email-input" class="form-label">Lead Added On:</label>
+                                                                                                {{form.date_added_on}}
                                                                                                 {% comment %} <input type="email" class="form-control" id="addcontact-email-input" placeholder="Enter Email"> {% endcomment %}
                                                                                             </div>
                                                                                          <div class="mb-3">
-                                                                                                <label for="addcontact-email-input" class="form-label">Business Category:</label>
-                                                                                                {{form.business_category}}
+                                                                                                <label for="addcontact-email-input" class="form-label">State:</label>
+                                                                                                {{form.state}}
                                                                                                 {% comment %} <input type="email" class="form-control" id="addcontact-email-input" placeholder="Enter Email"> {% endcomment %}
                                                                                             </div> 
                                                                                             {% comment %} <div class="mb-3">
@@ -1257,8 +1266,8 @@
                                                                                             </div>  {% endcomment %}
                                                                                             
                                                                                             <div class="mb-3">
-                                                                                                <label for="addcontact-email-input" class="form-label">Business Name:</label>
-                                                                                                {{form.business_name}}
+                                                                                                <label for="addcontact-email-input" class="form-label">District:</label>
+                                                                                                {{form.district}}
                                                                                                 {% comment %} <input type="email" class="form-control" id="addcontact-email-input" placeholder="Enter Email"> {% endcomment %}
                                                                                             </div>
                                                                                             {% comment %} <div class="mb-3">
@@ -1272,11 +1281,79 @@
                                                                                               
                                                                                             </div> {% endcomment %}
                                                                                             <div class="mb-3">
-                                                                                                <label for="addcontact-email-input" class="form-label">Status:</label>
-                                                                                                {{form.status}}
+                                                                                                <label for="addcontact-email-input" class="form-label">Place:</label>
+                                                                                                {{form.place}}
                                                                                                 {% comment %} <input type="email" class="form-control" id="addcontact-email-input" placeholder="Enter Email"> {% endcomment %}
                                                                                             </div>
-                                                                                           
+                                                                                            <div class="mb-3">
+                                                                                                <label for="addcontact-file-input" class="form-label">Business Name:</label>
+                                                                                             {{form.business_name}} 
+                                                                                                {% comment %} <input type="file" class="form-control" id="addcontact-file-input"> {% endcomment %}
+                                                                                            </div>
+                                                                                            <div class="mb-3">
+                                                                                                <label for="addcontact-file-input" class="form-label">Contact Person Name:</label>
+                                                                                             {{form.contact_person}} 
+                                                                                                {% comment %} <input type="file" class="form-control" id="addcontact-file-input"> {% endcomment %}
+                                                                                            </div>
+                                                                                            <div class="mb-3">
+                                                                                                <label for="addcontact-file-input" class="form-label">Contact Person Designation:</label>
+                                                                                             {{form.contact_person_designation}} 
+                                                                                                {% comment %} <input type="file" class="form-control" id="addcontact-file-input"> {% endcomment %}
+                                                                                            </div>
+                                
+                                                                                            <div class="mb-3">
+                                                                                                <label for="addcontact-email-input" class="form-label">Contact Person Phone No:</label>
+                                                                                                {{form.contact_person_number}}
+                                                                                            </div>
+                                                                                            <div class="mb-3">
+                                                                                                <label for="addcontact-email-input" class="form-label">Contact Person Email:</label>
+                                                                                                {{form.contact_person_email}}
+                                                                                                {% comment %} <input type="email" class="form-control" id="addcontact-email-input" placeholder="Enter Email"> {% endcomment %}
+                                                                                            </div>
+                                                                                            <div class="mb-3">
+                                                                                                <label for="addcontact-file-input" class="form-label">Business Owner Name:</label>
+                                                                                             {{form.business_owner_name}} 
+                                                                                                {% comment %} <input type="file" class="form-control" id="addcontact-file-input"> {% endcomment %}
+                                                                                            </div>
+                                                                                            <div class="mb-3">
+                                                                                                <label for="addcontact-email-input" class="form-label">Business Owner Phone No:</label>
+                                                                                                {{form.business_owner_number}}
+                                                                                            </div>
+                                                                                            <div class="mb-3">
+                                                                                                <label for="addcontact-email-input" class="form-label">Business Owner Email:</label>
+                                                                                                {{form.business_owner_email}}
+                                                                                                {% comment %} <input type="email" class="form-control" id="addcontact-email-input" placeholder="Enter Email"> {% endcomment %}
+                                                                                            </div>
+                                                                                            <div class="mb-3">
+                                                                                                <label for="addcontact-email-input" class="form-label">Address:</label>
+                                                                                                {{form.address}}
+                                                                                                {% comment %} <input type="email" class="form-control" id="addcontact-email-input" placeholder="Enter Email"> {% endcomment %}
+                                                                                            </div>
+                                                                                            <div class="mb-3">
+                                                                                                <label for="addcontact-email-input" class="form-label">Requirements:</label>
+                                                                                                {{form.requirements}}
+                                                                                                {% comment %} <input type="email" class="form-control" id="addcontact-email-input" placeholder="Enter Email"> {% endcomment %}
+                                                                                            </div>
+                                                                                            <div class="mb-3">
+                                                                                                <label for="addcontact-designation-input" class="form-label">Call Back Date:</label>
+                                                                                                {{form.callbackdate}}
+                                                                                                {% comment %} <input type="text" class="form-control" id="addcontact-designation-input" placeholder="Enter Designation"> {% endcomment %}
+                                                                                            </div>
+                                                                                            <div class="mb-3">
+                                                                                                <label for="addcontact-email-input" class="form-label">Interest Rate:</label>
+                                                                                                {{form.interest_rate}}
+                                                                                                {% comment %} <input type="email" class="form-control" id="addcontact-email-input" placeholder="Enter Email"> {% endcomment %}
+                                                                                            </div>
+                                                                                            <div class="mb-3">
+                                                                                                <label for="addcontact-email-input" class="form-label">Note:</label>
+                                                                                                {{form.notes}}
+                                                                                                {% comment %} <input type="email" class="form-control" id="addcontact-email-input" placeholder="Enter Email"> {% endcomment %}
+                                                                                            </div>
+                                                                                            <div class="mb-3">
+                                                                                                <label for="addcontact-email-input" class="form-label">Lead Type:</label>
+                                                                                                {{form.lead_type}}
+                                                                                                {% comment %} <input type="email" class="form-control" id="addcontact-email-input" placeholder="Enter Email"> {% endcomment %}
+                                                                                            </div>
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="modal-footer">
@@ -1296,6 +1373,22 @@
                                                         <div class="row">
                                                             <div class="col-lg-12">
                                                                 <div class="">
+                                                                    <form method="get" class="app-search d-none d-lg-block" action="#">
+                                                                        <div class="input-group">
+                                                                            <div class="form-outline">
+                                                                                {{filters.form.title.label_tag}}    
+                                                                                {% render_field filters.form.title class="form-control"%}                                                                        
+                                                                            </div>
+                                                                            <div class=" col-lg-2 col-12 col-sm-12 col-md-2">
+                                                                                {{ filters.form.contact_person.label_tag }}
+                                                                                {% render_field filters.form.contact_person class="form-control" %}
+                                                                            </div>
+                                                                            <div class="col-lg-2 col-12 col-sm-12 col-md-2">
+                                                                                <label style="margin-top:17px ;"></label>
+                                                                                 <button type="submit" class="btn btn-dark" id="search-btn">Search</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </form>
                                                                     {% comment %} <form method="get" >
                                                                         <div class="row">
                                                                                 <div class="col-lg-3  col-12 col-sm-12 col-md-4">
@@ -1335,7 +1428,7 @@
                                                                                     
                                                                                 </tr>
                                                                             </thead>
-                                                                            {% for i in all_leads %} 
+                                                                            {% for i in filters.qs %} 
                                                                             <tbody class="gridjs-tbody">
                                                                                 <tr class="gridjs-tr">
                                                                                     {% comment %} {% if i.staff_name.extendedusermodel.employe_name == '' %}
@@ -1559,16 +1652,16 @@
                                                         <div class="row">
                                                             <div class="col-lg-12">
                                                                 <div class="">
-                                                                    <form class="app-search d-none d-lg-block" action="#">
+                                                                    <form method="get" class="app-search d-none d-lg-block" action="#">
                                                                         <div class="input-group">
                                                                             <div class="form-outline">
-                                                                              <input id="search-input" name="q" placeholder="search"type="search" id="form1" class="form-control" />
+                                                                                {{filters.form.title}}                                                                            
                                                                             </div>
                                                                             <button id="search-button" type="submit" class="btn btn-primary">
                                                                               <i class="fas fa-search"></i>
                                                                             </button>
                                                                           </div>
-                                                                    </form>
+                                                                    </form> 
                                                                     <div class="cardbody">
                                                                         <div id="table-gridjs"><div role="complementary" class="gridjs gridjs-container" style="width: 100%;"><div class="gridjs-head"><div class="gridjs-search"></div></div><div class="gridjs-wrapper" style="height: auto;"><table role="grid" class="gridjs-table" style="height: auto;">
                                                                             <thead class="gridjs-thead">
@@ -1585,7 +1678,7 @@
                                                                                     </tr>                                                           
                                                                                 </tr>
                                                                             </thead>
-                                                                            {% for i in all_leads %} 
+                                                                            {% for i in filters.qs %} 
                                                                             <tbody class="gridjs-tbody">
                                                                                 <tr class="gridjs-tr">
                                                                                     

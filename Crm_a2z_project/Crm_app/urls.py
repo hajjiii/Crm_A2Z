@@ -33,6 +33,9 @@ urlpatterns = [
     path('running-lead-edit/<slug:slug>',views.running_lead_edit,name='edit_running_lead'),
     path('running-lead-status/<slug:slug>',views.running_lead_status,name='running_lead_status'),
     path('running-lead-delete/<slug:slug>',views.running_lead_delete,name='delete_running_lead'),
+    path('closed-lead',views.closed_leads,name='closedlead'),
+    path('closed-lead-edit/<slug:slug>',views.closed_lead_edit,name='edit_closed_lead'),
+    path('closed-lead-delete/<slug:slug>',views.closed_lead_delete,name='delete_closed_lead'),
 
     # --------------------------------------------------------------------------------------------
     path('telecallers-details',views.telecaller,name='telecaller'),
@@ -69,14 +72,6 @@ urlpatterns = [
     path('closed-project',views.closed_project, name='closedproject'),
     path('lead-project-delete/<slug:slug>',views.lead_project_delete,name='deleteprojectlead'),
     path('lead-project-edit/<slug:slug>',views.lead_project_edit,name='editprojectlead'),
-
-
-
-
-
-
-
-
 
 
 

@@ -189,15 +189,24 @@ class ProjectAddForm(forms.ModelForm):
         }
  
        
+
+
+
+# class UserSelectionForm(forms.Form):
+#     users = forms.ModelMultipleChoiceField(
+#     queryset=User.objects.all(),
+#     widget=forms.CheckboxSelectMultiple
+#     )
+from django.contrib.auth.models import User
+
 class ProjectAssignmentForm(forms.ModelForm):
+    project_assignment = forms.ModelMultipleChoiceField(queryset = ExtendedUserModel.objects.filter(is_teammember='on'), widget  = forms.CheckboxSelectMultiple,)
     class Meta:
         model = ProjectAssignment
         fields = "__all__"
         exclude = ['project_assignment_key','client','added_by','project',]
-        project_assignment = forms.ModelChoiceField(ExtendedUserModel.objects.filter(is_teammember='on'))
         widgets = {
             'message' : forms.Textarea(attrs={'class':'form-control','rows':'3'}),
-            'project_assignment':forms.SelectMultiple()
         }
   
 
@@ -232,3 +241,5 @@ class TeamleaderEditForm(forms.ModelForm):
             'dob': forms.DateInput(attrs={'class': 'form-control','type': 'date'}),
 
         } 
+
+

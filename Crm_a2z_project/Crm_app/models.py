@@ -125,7 +125,7 @@ class Leads(models.Model):
     staff = models.ForeignKey(ExtendedUserModel,on_delete=models.CASCADE, null=True, blank=True)
     staff_name = models.ForeignKey(User,on_delete=models.CASCADE, null=True, blank=True)
     category = models.ForeignKey(LeadCategory,on_delete=models.SET_NULL, blank=True, null=True)
-    title = models.CharField(max_length=30, blank=True, null=True)
+    title = models.CharField(max_length=30, blank=True, null=True,verbose_name='Title')
     key = models.CharField(max_length=25, blank=True, null=True)
     slug = models.SlugField(max_length=250, blank=True, null=True)
     state = models.ForeignKey(State,on_delete=models.SET_NULL, blank=True, null=True)
@@ -152,7 +152,7 @@ class Leads(models.Model):
     )
     interest_rate= models.CharField(max_length=25,choices=interest_choices,blank=True,null=False)
     date_added_on = models.DateTimeField(default=django.utils.timezone.now,blank=False, null=False)
-    actual_date_added_on = models.DateTimeField(auto_now=True,blank=False,null=False)
+    actual_date_added_on = models.DateTimeField(auto_now_add=True,blank=False,null=False)
     lead_type = models.ForeignKey(LeadType,on_delete=models.SET_NULL,blank=True,null=True)
     lead_source = models.ForeignKey(LeadSource, on_delete=models.SET_NULL, blank=True, null=True)
     # status = models.ForeignKey(Status, on_delete=models.SET_NULL,default='Freshlead',blank=True, null=True)
@@ -235,7 +235,7 @@ class Project(models.Model):
     p_key = models.CharField(max_length=25, blank=True, null=True)
     slug = models.SlugField(max_length=250, blank=True, null=True)
     client = models.ForeignKey(Client, on_delete=models.SET_NULL, blank=True, null=True,)
-    project_title = models.CharField(max_length=30, blank=True, null=True)
+    project_title = models.CharField(max_length=30, blank=True, null=True,verbose_name='Title')
     requirements =  models.TextField(blank=True,null=True)
     category = models.ForeignKey(LeadCategory,on_delete=models.SET_NULL, blank=True, null=True)
     interest_choices = (
@@ -257,7 +257,7 @@ class Project(models.Model):
     # )
     # client_status = models.ForeignKey(ClientStatus, on_delete=models.SET_NULL,default=3,blank=True, null=True)
     date_added_on = models.DateTimeField(default=django.utils.timezone.now,blank=False, null=False)
-    actual_date_added_on = models.DateTimeField(auto_now=True,blank=False,null=False)
+    actual_date_added_on = models.DateTimeField(auto_now_add=True,blank=False,null=False)
     lead = models.ForeignKey(Leads, on_delete=models.SET_NULL, blank=True, null=True,)
 
 
@@ -294,7 +294,7 @@ class Invoice(models.Model):
     client = models.ForeignKey(Client, on_delete=models.SET_NULL, blank=True, null=True)
     project = models.ForeignKey(Project, on_delete=models.SET_NULL, blank=True, null=True)
     added_by = models.ForeignKey(User,on_delete=models.CASCADE, null=True, blank=True)
-    added_on = models.DateTimeField(auto_now=True,blank=False,null=False)
+    added_on = models.DateTimeField(auto_now_add=True,blank=False,null=False)
     creation_date = models.DateTimeField(default=django.utils.timezone.now,blank=False, null=False)
     expiry_date = models.DateField(blank=True,null=True)
     invoice_status = models.ForeignKey(InvoiceStatus,on_delete=models.CASCADE, null=True, blank=True,default=0)
@@ -330,7 +330,7 @@ class Billing(models.Model):
     invoice = models.ForeignKey(Invoice, on_delete=models.SET_NULL, blank=True, null=True)
     amount = models.PositiveIntegerField(blank=True,null=True)
     added_by = models.ForeignKey(User,on_delete=models.CASCADE, null=True, blank=True)
-    added_on = models.DateTimeField(auto_now=True,blank=False,null=False)
+    added_on = models.DateTimeField(auto_now_add=True,blank=False,null=False)
     creation_date = models.DateTimeField(default=django.utils.timezone.now,blank=False, null=False)
     direction_choices = (
         ('-1','-1'),
@@ -372,8 +372,8 @@ class ProjectAssignment(models.Model):
     client = models.ForeignKey(Client, on_delete=models.SET_NULL, blank=True, null=True)
     project = models.ForeignKey(Project,related_name = "products",on_delete=models.SET_NULL, blank=True, null=True)
     added_by = models.ForeignKey(ExtendedUserModel,on_delete=models.CASCADE,null=True,blank=True)
-    added_on = models.DateTimeField(auto_now=True,blank=False,null=False)
-    project_assignment = models.CharField(max_length=25, blank=True, null=True)
+    added_on = models.DateField(auto_now_add=True,blank=False,null=False)
+    project_assignment = models.CharField(max_length=300, blank=True, null=True)
     message = models.TextField(max_length=250, blank=True, null=True)
     document = models.FileField(upload_to='documents/',blank=True, null=True)
 

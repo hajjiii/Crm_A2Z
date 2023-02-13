@@ -1,3 +1,4 @@
+{% load widget_tweaks %}
 {% load static %}
 <!doctype html>
 <html lang="en">
@@ -427,6 +428,14 @@
                                 <a href="{% url 'Crm_app:runninglead' %}">
                                    <i class='bx bxs-grid'></i>
                                     <span key="t-apps">Running Leads</span>
+                                </a>
+
+                        
+                            </li> 
+                            <li>
+                                <a href="{% url 'Crm_app:closedlead' %}">
+                                   <i class='bx bxs-grid'></i>
+                                    <span key="t-apps">Closed Leads</span>
                                 </a>
 
                         
@@ -1266,6 +1275,23 @@
                                                         <div class="row">
                                                             <div class="col-lg-12">
                                                                 <div class="">
+                                                                    
+                                                                    <form method="get" class="app-search d-none d-lg-block" action="#">
+                                                                        <div class="input-group">
+                                                                            <div class="form-outline">
+                                                                                {{filters.form.contact_person_name.label_tag}}    
+                                                                                {% render_field filters.form.contact_person_name class="form-control"%}                                                                        
+                                                                            </div>
+                                                                            <div class=" col-lg-2 col-12 col-sm-12 col-md-2">
+                                                                                {{ filters.form.business_name.label_tag }}
+                                                                                {% render_field filters.form.business_name class="form-control" %}
+                                                                            </div>
+                                                                            <div class="col-lg-2 col-12 col-sm-12 col-md-2">
+                                                                                <label style="margin-top:17px ;"></label>
+                                                                                 <button type="submit" class="btn btn-dark" id="search-btn">Search</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </form>
                                                                     {% comment %} <form method="get" >
                                                                         <div class="row">
                                                                                 <div class="col-lg-3  col-12 col-sm-12 col-md-4">
@@ -1305,7 +1331,7 @@
                                                                                     
                                                                                 </tr>
                                                                             </thead>
-                                                                            {% for i in all_client %} 
+                                                                            {% for i in filters.qs %} 
                                                                             <tbody class="gridjs-tbody">
                                                                                 <tr class="gridjs-tr">
                                                                                     {% comment %} {% if i.staff_name.extendedusermodel.employe_name == '' %}
@@ -1453,7 +1479,7 @@
                                                                                     
                                                                                 </tr>
                                                                             </thead>
-                                                                            {% for i in all_client %} 
+                                                                            {% for i in filters.qs %} 
                                                                             <tbody class="gridjs-tbody">
                                                                                 <tr class="gridjs-tr">
                                                                                     {% comment %} {% if i.staff_name.extendedusermodel.employe_name == '' %}
