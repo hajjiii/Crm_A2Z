@@ -21,7 +21,8 @@ app_name= 'Crm_app'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('Crm_app.urls')),
-    path('marketing/', include('marketing.urls'))
+    path('marketing/', include('marketing.urls')),
+    path('CHECKBOX/', include('checkbox.urls'))
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL,

@@ -190,6 +190,34 @@ class ProjectAddForm(forms.ModelForm):
  
        
 
+class ProjectAssignmnetProjectForm(forms.ModelForm):
+    # def init(self, args, **kwargs):
+    #     super().init(args, **kwargs)
+    #     self.fields['project_title'].disabled = True
+    #     self.fields['project_title'].widget.can_change_related = False
+        # self.fields['requirements'].disabled = True
+        # self.fields['requirements'].widget.can_change_related = False
+        # self.fields['category'].disabled = True
+        # self.fields['category'].widget.can_change_related = False
+    class Meta:
+        model = Project
+        fields = "__all__"
+        exclude = ['p_key','actual_date_added_on','client','date_added_on','project_status','interest_rate','notes']
+    
+        widgets ={
+            # 'client' : forms.Select(attrs={'class':'form-control'}),
+            'project_title' : forms.TextInput(attrs={'class':'form-control','disabled':'disabled'}),
+            'requirements' : forms.Textarea(attrs={'class':'form-control','rows':'3','disabled':'disabled'}),
+            'category' : forms.Select(attrs={'class':'form-control','disabled':'disabled'}),
+            # 'interest_rate' : forms.Select(attrs={'class':'form-control'}),
+            # 'notes' : forms.Textarea(attrs={'class':'form-control','rows':'3'}),
+            # 'date_added_on': forms.DateTimeInput(attrs={'class': 'form-control'}),
+            # 'project_status': forms.Select(attrs={'class':'form-control'}),
+
+
+        }
+ 
+       
 
 
 # class UserSelectionForm(forms.Form):
@@ -200,13 +228,15 @@ class ProjectAddForm(forms.ModelForm):
 from django.contrib.auth.models import User
 
 class ProjectAssignmentForm(forms.ModelForm):
-    project_assignment = forms.ModelMultipleChoiceField(queryset = ExtendedUserModel.objects.filter(is_teammember='on'), widget  = forms.CheckboxSelectMultiple,)
+    project_assignment = forms.ModelMultipleChoiceField(queryset = ExtendedUserModel.objects.filter(is_teammember='on'), widget  = forms.CheckboxSelectMultiple)
     class Meta:
         model = ProjectAssignment
         fields = "__all__"
         exclude = ['project_assignment_key','client','added_by','project',]
         widgets = {
             'message' : forms.Textarea(attrs={'class':'form-control','rows':'3'}),
+            'project_start_date': forms.DateInput(attrs={'class': 'form-control','type': 'date'}),
+
         }
   
 

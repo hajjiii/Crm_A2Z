@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'Crm_app',
     'widget_tweaks',
     'marketing',
-    'django_filters'
+    'django_filters',
+    'checkbox',
 ]
 
 MIDDLEWARE = [

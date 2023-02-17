@@ -364,7 +364,7 @@ pre_save.connect(pre_save_post_receiver, sender=Billing)
 
 class ProjectAssignment(models.Model):
     def __str__(self):
-        return self.project_assignment
+        return self.message
     class Meta:
         verbose_name_plural = 'Project Assignment'
         
@@ -373,9 +373,22 @@ class ProjectAssignment(models.Model):
     project = models.ForeignKey(Project,related_name = "products",on_delete=models.SET_NULL, blank=True, null=True)
     added_by = models.ForeignKey(ExtendedUserModel,on_delete=models.CASCADE,null=True,blank=True)
     added_on = models.DateField(auto_now_add=True,blank=False,null=False)
-    project_assignment = models.CharField(max_length=300, blank=True, null=True)
+    project_assignment = models.ManyToManyField(ExtendedUserModel,related_name='project_assignment', blank=True, null=True)
     message = models.TextField(max_length=250, blank=True, null=True)
     document = models.FileField(upload_to='documents/',blank=True, null=True)
+    project_start_date = models.DateField(blank=True,null=True)
+    # project_end_date =
+
+
+class ModuleManagement(models.Model):
+    module_management_key = models.CharField(max_length=25, blank=True, null=True)
+    module_name = models.CharField(max_length=30, blank=True, null=True)
+    module_description = models.TextField(max_length=250, blank=True, null=True)
+    module_start_date = models.DateField(blank=True,null=True)
+    # module_assigned =  models.ManyToManyField(ProjectAssignment,blank=True,null=True)
+
+
+
 
     
 

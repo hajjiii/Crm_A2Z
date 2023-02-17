@@ -679,78 +679,7 @@
                                                                 {{form.project_status}}
                                                                
                                                             </div>
-                                                            {% if user.is_authenticated and user.extendedusermodel.is_teamleader %}
-                                                            <h6>PROJECT ASSIGNED TO:</h6>
-                                                           
-                                                                <table class="table table-responsive table-borderless table-lg">
-                                                                    <thead class="text-center">
-                                                                    <tr>
-                                                                        <th>Team Members:</th>
-                                                                        <th>Message:</th>
-                                                                        <th>Document:</th>
-            
-                                                                    </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                    {% for form_2 in formset %}
-                                                                    <tr class="item">
-                                                                        {% comment %} <td  style="width:165px" >
-                                                                            {% comment %} {{form_2.project_assignment}} {% endcomment %}
-                                                                            {% comment %} <center>
-                                                                                {% for i in teammember%} 
-                                                                                <input type="checkbox"  class="chkbox" name='checkbox' value="{{i.employe_name}}">{{i.employe_name}}</input>
-                                                                                {% endfor %}
-                                                                                <br> 
-                                                                              
-                                                                            </center>
-                                                                        </td> {% endcomment %}
-                                                                        {% comment %} <div class="col-lg-6"> {% endcomment %}
-                                                                            {% comment %} <center>
-                                                                            {% for i in teammember%} 
-                                                                            <input type="checkbox"  class="chkbox" name='checkbox' value="{{i.employe_name}}">{{i.employe_name}}</input>
-                                                                            {% endfor %}
-                                                                            <br>
-                                                                            {% comment %} <input type="text" id="chktext" name="project_assignment"> {% endcomment %}
-                                                                            {% comment %} </center> {% endcomment %}
-                                                                        {% comment %} <td style="width:165px">
-                                                                            {% comment %} {% for i in teammember%}
-                                                                            <label for="addcontact-email-input" class="form-label">{{i}}:</label> 
-
-                                                                            {{form_2.project_assignment}}
-                                                                           {% endfor %}                          
-
-                                                                        </td> {% endcomment %} 
-                                                                        <td  style="width:165px" >
-                                                                            {{form_2.project_assignment}}
-                                                                          
-                                                                        </td>
-                                                                        <td  style="width:165px" >
-                                                                            {{form_2.message}}
-                                                                          
-                                                                        </td>
-                                                                        <td  style="width:165px">
-                                                                            {{form_2.document}}
-
-                                                                           
-                                                                        </td>
-                                                                       
-                                                                        {% comment %} {{ form_data.id }} {% endcomment %}
-                                                                        
-                                                                    </tr>
-                                                                    {% endfor %}
-                                                                    <tr>
-                                                                        
-                                                                    </tr>
-                                                                    </tbody>
-                                                                </table>
-                                                                {{ formset.management_form }}
-                                                                {% for form_data in formset %}
-                                                                {% for hidden in form_data.hidden_fields %}
-                                                                {{ hidden }}
-                                                                {% endfor %}
-                                                                {% endfor %}
-
-                                                            {% endif %}
+                                                            
                                                         <div class="row mt-3"id="row">
                                                          
                                                         <div class="col-lg-6">

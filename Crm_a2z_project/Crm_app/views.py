@@ -4,7 +4,7 @@ from django.contrib.auth.models import User,auth
 from django.contrib.auth import authenticate , login 
 from django.shortcuts import redirect, render
 from .models import Client, LeadCategory, Project, ProjectAssignment, State, District,  Leads, LeadSource,ExtendedUserModel , LeadType, LeadStatus 
-from .forms import ClientViewForm, LeadAddForm, LeadEditForm, LeadViewForm, LoginForm, ProjectAssignmentForm , StatusEditForm, ClientAddForm, ProjectAddForm, TeamleaderEditForm, TeamleaderViewForm
+from .forms import ClientViewForm, LeadAddForm, LeadEditForm, LeadViewForm, LoginForm, ProjectAssignmentForm, ProjectAssignmnetProjectForm , StatusEditForm, ClientAddForm, ProjectAddForm, TeamleaderEditForm, TeamleaderViewForm
 from email.message import EmailMessage
 from django.http.response import JsonResponse
 from django.contrib.auth import logout
@@ -403,9 +403,10 @@ def project_add(request):
         return render(request,'project.html',{'all_project':all_project,'form':form,'clients':clients,'obj1':obj1,'filters':filters,'filters1':filters1})
 
     elif request.user.extendedusermodel.is_teammember:
+        user = request.user.extendedusermodel.employe_name
         obj1 = Leads.objects.filter(lead_statuss__name = 'ConvertToProject') 
         filters1 = LeadsFilter(request.GET,queryset=obj1)  
-        all_project = ProjectAssignment.objects.filter(project_assignment=request.user.extendedusermodel.employe_name)
+        all_project = ProjectAssignment.objects.filter(project_assignment__user__username=request.user.username)
         filters = ProjectFilter(request.GET,queryset=all_project)
         return render(request,'project.html',{'all_project':all_project,'form':form,'clients':clients,'obj1':obj1,'filters':filters,'filters1':filters1})
     elif request.user.extendedusermodel.is_telecallers:
@@ -461,65 +462,25 @@ def project_edit(request,slug):
     key = h.hexdigest()
     context = {}  
     teammember = ExtendedUserModel.objects.filter(is_teammember='on')
-    ProjectAssignmentFormset = modelformset_factory(ProjectAssignment,ProjectAssignmentForm,max_num=1)
     form = ProjectAddForm(request.POST or None)
     qs = Project.objects.get(slug=slug)
-    formset = ProjectAssignmentFormset(request.POST or None,request.FILES or None, queryset= qs.products.all(), prefix='products')
-    if request.method=='POST':
+    if request.method == 'POST':
         name = request.user.username
         addedby = ExtendedUserModel.objects.get(user__username = name)
+        msg = request.POST.get('message')
+        dcmnt = request.FILES.get('document')
         qs = Project.objects.get(slug=slug)
         form = ProjectAddForm(request.POST,request.FILES,instance=qs)
+        chckbx = request.POST.getlist('project_assignment')
         client_key = qs.client
-        project_title = qs.project_title
-        if form.is_valid and formset.is_valid():
-
-            # print('CHCKBX:',r)
-            try:
-                with transaction.atomic():
-                    project = form.save(commit=False)
-                    project.save()
-                    for product in formset:
-                        chckbx = request.POST.getlist('products-0-project_assignment')
-                        for i in chckbx:
-                            print(i)
-                            r = ExtendedUserModel.objects.get(id=int(i))
-                            print('teammembers',r)
-                            data = product.save(commit=False)
-                            data.project_assignment_key = key
-                            data.client = client_key
-                            data.project = project
-                            data.added_by = addedby
-                            data.project_assignment = r.employe_name
-                            # data.project_assignment = product.cleaned_data['products-0-project_assignment']
-                            data.save()
-                            print( data.project_assignment)
-                            # ----------------------------------------
-                            date = ProjectAssignment.objects.filter(project=project)
-                            print('date:',date)
-                            recipient_list = [] 
-                            username = []
-                            username.append(r.employe_name)
-                            print(username)
-                            recipient_list.append(r.user.email)
-                            print(recipient_list)
-                            template = render_to_string('email.html',{'username':username,'project_title':project_title,'date':date})
-                            email = EmailMessage(
-                                'Assigned Project', #subject
-                                template, #body
-                                settings.EMAIL_HOST_USER, #sender mail id
-                                [i for i in recipient_list] #recever mail id
-
-                        )
-                        email.fail_silently = False
-                        email.send()
-                        print('successful')
-                    # print(formset.cleaned_data)
-                    # print('project assigned to:',data.added_by)
-                        # print('formset is saved',int(formset.cleaned_data['project_assignment']))
-            except IntegrityError:
-                print("Error Encountered")
-        print('project assigned to:',data.added_by)
+        # project_title = qs.project_title
+        if form.is_valid():
+            project = form.save(commit=False)
+            project.save()
+            for i in chckbx:
+                print(i)
+                r = ExtendedUserModel.objects.get(id=int(i))
+                ProjectAssignment.objects.create(project=project,project_assignment = r.employe_name,project_assignment_key = key,client = client_key,added_by = addedby, message = msg, document= dcmnt )
         return redirect('Crm_app:project')
 
         # else:
@@ -527,10 +488,85 @@ def project_edit(request,slug):
             # print(form.cleaned_data)
     qs = Project.objects.get(slug=slug)
     form = ProjectAddForm(instance=qs)
-    context['formset'] = formset
+    project_assign_form = ProjectAssignmentForm()
     context['form'] = form
     context['teammember'] = teammember
+    context['project_assign_form'] = project_assign_form
     return render(request,'project_edit.html',context)
+
+@login_required
+def project_assignment_add(request,slug):
+    k = str(time.time()).encode('utf-8')
+    h = blake2b(key=k, digest_size=10)
+    key = h.hexdigest()
+    qs = Project.objects.get(slug=slug)
+    title = qs.project_title
+    client_key = qs.client
+    name = request.user.username
+    addedby = ExtendedUserModel.objects.get(user__username = name)
+    ProjectAssignmentFormset = modelformset_factory(ProjectAssignment,ProjectAssignmentForm,max_num=1)
+    # project_assign_form = ProjectAssignmentForm()
+    form = ProjectAssignmnetProjectForm(instance=qs)
+    formset = ProjectAssignmentFormset(request.POST or None,request.FILES or None, queryset= qs.products.all(), prefix='products')
+    if request.method == 'POST':
+        # project_assign_form = ProjectAssignmentForm(request.POST,request.FILES)
+        if formset.is_valid():
+            for product in formset:
+                d = product.save(commit=False)
+                d.project_assignment_key = key
+                d.client = client_key
+                d.project = qs
+                d.added_by = addedby
+                d.save()
+                print(formset)
+            product.save_m2m()
+
+            return redirect('Crm_app:project')
+        else:
+            print(formset.errors)
+            # print(formset.cleaned_data)
+
+    
+    form = ProjectAssignmnetProjectForm(instance=qs)      
+    project_assign_form = ProjectAssignmentForm()
+    context = {
+        'formset':formset,       
+        'form':form 
+        }
+    return render(request,'project_assignment_add.html',context)
+
+    
+
+
+@login_required
+def list_prjct_assgnmnt(request):
+    qs = ProjectAssignment.objects.all()
+    context={'qs':qs}
+    return render(request,'prjctasgnmnt.html',context)
+
+@login_required
+def project_assignment_edit(request,id):
+    chckbx = request.POST.getlist('project_assignment')
+    if request.method == 'POST':
+        qs = ProjectAssignment.objects.get(id=id)
+        form = ProjectAssignmentForm(request.POST,instance=qs)
+        for i in chckbx:
+            r = ExtendedUserModel.objects.get(id=int(i))
+            if form.is_valid():
+                form.save()
+                return redirect('Crm_app:projectassgnmnt')
+    else:
+        qs =ProjectAssignment.objects.get(id=id)
+        form = ProjectAssignmentForm(instance=qs)
+    return render(request,'prjct_asgnmnt_edit.html',{'form':form})
+
+
+
+
+def prjct_assgnmnt_delete(requesr,id):
+    qs = ProjectAssignment.objects.filter(id=id)
+    qs.delete()
+    return redirect('Crm_app:projectassgnmnt')
 
 
 @login_required  

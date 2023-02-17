@@ -55,11 +55,17 @@ urlpatterns = [
     path('project-view/<slug:slug>',views.project_view,name='viewproject'),
     path('project-edit/<slug:slug>',views.project_edit,name='editproject'),
     path('project-delete/<slug:slug>',views.project_delete,name='deleteproject'),
+    path('list-project-assignment',views.list_prjct_assgnmnt, name='projectassgnmnt'),
+    path('project-assignmnet-edit/<int:id>',views.project_assignment_edit,name='editprjctassgnmnt'),
     re_path(r'^download/(?P<path>.*)$',serve,{'document_root':settings.MEDIA_ROOT}),
     path('teamleader_list',views.team_leader_details, name='listteamleader'),
     path('team-leader-view/<int:id>',views.team_leader_view,name='viewteamleader'),
     path('team-leader-edit/<int:id>',views.team_leader_edit,name='editteamleader'),
     path('teamleader-delete/<int:id>',views.teamleader_delete,name='deleteteamleader'),
+    path('prjct-assignmnt-delete/<int:id>',views.prjct_assgnmnt_delete,name='deleteprjctassgnmnt'),
+    # ---------------------------------------------------------
+
+    path('project-assignment-add/<slug:slug>',views.project_assignment_add,name='prjctassignmnt'),
 
 
 
