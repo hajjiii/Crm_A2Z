@@ -385,6 +385,7 @@ class ModuleManagement(models.Model):
     module_name = models.CharField(max_length=30, blank=True, null=True)
     module_description = models.TextField(max_length=250, blank=True, null=True)
     module_start_date = models.DateField(blank=True,null=True)
+    # project = models.ForeignKey(Project,blank=True,null=True)
     # module_assigned =  models.ManyToManyField(ProjectAssignment,blank=True,null=True)
 
 
