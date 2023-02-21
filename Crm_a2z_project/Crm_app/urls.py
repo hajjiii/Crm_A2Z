@@ -55,24 +55,33 @@ urlpatterns = [
     path('project-view/<slug:slug>',views.project_view,name='viewproject'),
     path('project-edit/<slug:slug>',views.project_edit,name='editproject'),
     path('project-delete/<slug:slug>',views.project_delete,name='deleteproject'),
-    path('list-project-assignment',views.list_prjct_assgnmnt, name='projectassgnmnt'),
-    path('project-assignmnet-edit/<int:id>',views.project_assignment_edit,name='editprjctassgnmnt'),
     re_path(r'^download/(?P<path>.*)$',serve,{'document_root':settings.MEDIA_ROOT}),
     path('teamleader_list',views.team_leader_details, name='listteamleader'),
     path('team-leader-view/<int:id>',views.team_leader_view,name='viewteamleader'),
     path('team-leader-edit/<int:id>',views.team_leader_edit,name='editteamleader'),
     path('teamleader-delete/<int:id>',views.teamleader_delete,name='deleteteamleader'),
-    path('prjct-assignmnt-delete/<int:id>',views.prjct_assgnmnt_delete,name='deleteprjctassgnmnt'),
     # ---------------------------------------------------------
 
     path('project-assignment-add/<slug:slug>',views.project_assignment_add,name='prjctassignmnt'),
+    path('list-project-assignment',views.list_prjct_assgnmnt, name='projectassgnmnt'),
+    path('project-assignmnet-edit/<int:id>',views.project_assignment_edit,name='editprjctassgnmnt'),
+    path('prjct-assignmnt-delete/<int:id>',views.prjct_assgnmnt_delete,name='deleteprjctassgnmnt'),
+
+
+
+# ---------------------------------------------------------------------------------------------------
+    # path('module-assgnmnt-add/<int:id>',views.module_assgnmnt_add,name='add_module_assgnmnt'),
+    path('project-module-add/',views.project_module_add,name='projectmoduleadd'),
+    path('project-module-delete/<int:id>',views.project_module_delete,name='deleteprjctmodule'),
+    path('project-module-edit/<int:id>',views.project_module_edit,name='editprjctmodule'),
+    path('project-module-view/<int:id>',views.project_module_view,name='viewprjctmodule'),
 
 
 
 
 
 
-
+# ------------------------------------------------------------------------------------------
     path('running-project',views.running_project, name='runningproject'),
     path('suspended-project',views.suspended_project, name='suspendedproject'),
     path('closed-project',views.closed_project, name='closedproject'),

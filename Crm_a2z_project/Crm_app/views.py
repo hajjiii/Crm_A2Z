@@ -3,8 +3,8 @@ from django.http import Http404, HttpResponse
 from django.contrib.auth.models import User,auth
 from django.contrib.auth import authenticate , login 
 from django.shortcuts import redirect, render
-from .models import Client, LeadCategory, Project, ProjectAssignment, State, District,  Leads, LeadSource,ExtendedUserModel , LeadType, LeadStatus 
-from .forms import ClientViewForm, LeadAddForm, LeadEditForm, LeadViewForm, LoginForm, ProjectAssignmentForm, ProjectAssignmnetProjectForm , StatusEditForm, ClientAddForm, ProjectAddForm, TeamleaderEditForm, TeamleaderViewForm
+from .models import Client, LeadCategory, Project, ProjectAssignment, ProjectModule, State, District,  Leads, LeadSource,ExtendedUserModel , LeadType, LeadStatus 
+from .forms import ClientViewForm, LeadAddForm, LeadEditForm, LeadViewForm, LoginForm, ProjectAssignmentForm, ProjectAssignmnetProjectForm, ProjectModuleForm , StatusEditForm, ClientAddForm, ProjectAddForm, TeamleaderEditForm, TeamleaderViewForm
 from email.message import EmailMessage
 from django.http.response import JsonResponse
 from django.contrib.auth import logout
@@ -494,6 +494,8 @@ def project_edit(request,slug):
     context['project_assign_form'] = project_assign_form
     return render(request,'project_edit.html',context)
 
+    # --------------------prjctassgnmnt-------------------------------
+
 @login_required
 def project_assignment_add(request,slug):
     k = str(time.time()).encode('utf-8')
@@ -562,11 +564,140 @@ def project_assignment_edit(request,id):
 
 
 
+        
+
 
 def prjct_assgnmnt_delete(requesr,id):
     qs = ProjectAssignment.objects.filter(id=id)
     qs.delete()
     return redirect('Crm_app:projectassgnmnt')
+
+
+
+
+# # ---------------------ModuleAssgnmnt----------------------------------------
+
+
+@login_required
+def project_module_add(request):
+    # qs = Project.objects.get(slug=slug)
+    k = str(time.time()).encode('utf-8')
+    h = blake2b(key=k, digest_size=10)
+    key = h.hexdigest()
+    name = request.user.username
+    createdby = ExtendedUserModel.objects.get(user__username = name)
+    form = ProjectModuleForm()
+    if request.method == 'POST':
+        form = ProjectModuleForm(request.POST)
+        if form.is_valid():
+            data = form.save(commit=False)
+            data.project_module_key = key
+            data.created_by = createdby
+            # data.project = qs
+            data.save()
+            return redirect('Crm_app:projectmoduleadd')
+    else:
+        form = ProjectModuleForm()
+
+    qs = ProjectModule.objects.all()
+    
+    context = {
+        'form':form,
+        'qs':qs
+        }
+    return render(request,'project_module.html',context)
+
+
+@login_required
+def project_module_edit(request,id):
+    if request.method == 'POST':
+        qs = ProjectModule.objects.get(id=id)
+        form = ProjectModuleForm(request.POST,instance=qs)
+        if form.is_valid():
+            form.save()
+            return redirect('Crm_app:projectmoduleadd')
+    else:
+        qs = ProjectModule.objects.get(id=id)
+        form = ProjectModuleForm(instance=qs)
+    return render(request,'project_module_edit.html',{'form':form})
+
+
+
+@login_required
+def project_module_delete(request,id):
+    qs = ProjectModule.objects.get(id=id)
+    qs.delete()
+    return redirect('Crm_app:projectmoduleadd')
+
+
+@login_required
+def project_module_view(request,id):
+    qs = ProjectModule.objects.filter(id=id).first()
+    form = ProjectModuleForm(instance=qs)
+    context = {
+        'form':form,
+    }
+    return render(request,'project_module_view.html',context)
+
+
+
+
+
+
+
+
+
+
+# @login_required
+# def module_assgnmnt_add(request,id):
+#     context = {}
+#     k = str(time.time()).encode('utf-8')
+#     h = blake2b(key=k, digest_size=10)
+#     key = h.hexdigest()
+#     qs = ProjectAssignment.objects.get(id=id)
+#     print(qs)
+#     project_assigned = qs.project_assignment
+#     ModuleAssignmentFormset = modelformset_factory(ModuleManagement,ModuleManagementForm,max_num=1)
+#     form = ProjectAssignmentForm(instance=qs)
+#     formset = ModuleAssignmentFormset(request.POST or None,request.FILES or None, queryset= qs.prjct_assignment.all(), prefix='prjct_assignment')
+#     if request.method == 'POST':
+#         if formset.is_valid():
+#             try:
+#                 with transaction.atomic():
+#                     for module in formset:
+#                         data = module.save(commit=False)
+#                         data.module_management_key = key
+#                         data.project = qs.project
+#                         data.prjct_assignment = qs
+#                         data.save()
+#                     module.save_m2m()
+#             except IntegrityError:
+#                 print("Error Encountered")
+#             return redirect('Crm_app:projectassgnmnt')
+#         else:
+#             print(formset.errors)
+
+#     form = ProjectAssignmentForm(instance=qs) 
+#     context['formset'] = formset
+#     context['form'] = form
+#     return render(request,'module_assignment_add.html',context)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 @login_required  
@@ -636,6 +767,7 @@ def lead_project_edit(request,slug):
         qs = Leads.objects.get(slug=slug)
         form = LeadEditForm(instance=qs)
     return render(request,'lead_edit.html',{'form':form})
+
 
 
 

@@ -1,4 +1,4 @@
-from .models import LeadCategory, ProjectAssignment, State, District,  Leads, LeadSource,ExtendedUserModel , LeadType, LeadStatus, Client, Project
+from .models import LeadCategory, ProjectAssignment, ProjectModule, State, District,  Leads, LeadSource,ExtendedUserModel , LeadType, LeadStatus, Client, Project
 
 from django import forms
 
@@ -239,6 +239,44 @@ class ProjectAssignmentForm(forms.ModelForm):
 
         }
   
+
+class ProjectModuleForm(forms.ModelForm):
+    class Meta:
+        model = ProjectModule
+        
+        fields = "__all__"
+        exclude = ['project_module_key','created_by','project','module_status','added_on']
+        widgets = {
+            'module_title' : forms.TextInput(attrs={'class':'form-control'}),
+            'module_description' : forms.Textarea(attrs={'class':'form-control','rows':'3'}),
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+# class ModuleManagementForm(forms.ModelForm):
+#     module_assigned = forms.ModelMultipleChoiceField(queryset = ExtendedUserModel.objects.filter(is_teammember='on') , widget  = forms.CheckboxSelectMultiple)
+#     class Meta:
+#         model = ModuleManagement
+#         fields="__all__"
+#         exclude =['module_management_key','project','prjct_assignment']
+#         widgets = {
+#             'module_name' : forms.TextInput(attrs={'class':'form-control'}),
+#             'module_description' : forms.Textarea(attrs={'class':'form-control','rows':'3'}),
+#             'module_start_date': forms.DateInput(attrs={'class': 'form-control','type': 'date'}),
+
+#         }
+
+
+
 
 class TeamleaderViewForm(forms.ModelForm):
    

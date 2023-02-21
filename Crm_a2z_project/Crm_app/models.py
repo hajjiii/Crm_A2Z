@@ -26,6 +26,15 @@ import time
 
 # Create your models here.
 
+
+MODULE_STATUS_CHOICES = (
+
+        ('0', '0'),
+        ('0', '0'),
+        ('1', '1'),
+       
+)
+
 class LeadCategory(models.Model):
     name = models.CharField(max_length=30,blank=True,null=True)
 
@@ -373,25 +382,57 @@ class ProjectAssignment(models.Model):
     project = models.ForeignKey(Project,related_name = "products",on_delete=models.SET_NULL, blank=True, null=True)
     added_by = models.ForeignKey(ExtendedUserModel,on_delete=models.CASCADE,null=True,blank=True)
     added_on = models.DateField(auto_now_add=True,blank=False,null=False)
-    project_assignment = models.ManyToManyField(ExtendedUserModel,related_name='project_assignment', blank=True, null=True)
+    project_assignment = models.ManyToManyField(ExtendedUserModel,related_name='project_assignment', blank=True)
     message = models.TextField(max_length=250, blank=True, null=True)
     document = models.FileField(upload_to='documents/',blank=True, null=True)
     project_start_date = models.DateField(blank=True,null=True)
     # project_end_date =
 
 
-class ModuleManagement(models.Model):
-    module_management_key = models.CharField(max_length=25, blank=True, null=True)
-    module_name = models.CharField(max_length=30, blank=True, null=True)
+# class ModuleManagement(models.Model):
+#     def __str__(self):
+#         return self.module_name
+        
+#     module_management_key = models.CharField(max_length=25, blank=True, null=True)
+#     module_name = models.CharField(max_length=30, blank=True, null=True)
+#     module_description = models.TextField(max_length=250, blank=True, null=True)
+#     module_start_date = models.DateField(blank=True,null=True)
+#     project = models.ForeignKey(Project,blank=True,null=True,on_delete=models.SET_NULL)
+#     prjct_assignment = models.ForeignKey(ProjectAssignment,related_name = "prjct_assignment",blank=True,null=True,on_delete=models.SET_NULL)
+#     module_assigned =  models.ManyToManyField(ExtendedUserModel,blank=True,null=True,related_name='module_assigned')
+
+
+class ProjectModule(models.Model):
+    def __str__(self):
+        return self.module_title
+
+    project_module_key = models.CharField(max_length=25, blank=True, null=True)
+    module_title = models.CharField(max_length=30, blank=True, null=True)
     module_description = models.TextField(max_length=250, blank=True, null=True)
-    module_start_date = models.DateField(blank=True,null=True)
-    # project = models.ForeignKey(Project,blank=True,null=True)
-    # module_assigned =  models.ManyToManyField(ProjectAssignment,blank=True,null=True)
+    # created_by = models.ForeignKey(ExtendedUserModel,on_delete=models.CASCADE,null=True,blank=True)
+    created_by = models.CharField(max_length=25, blank=True, null=True)
+    project = models.ForeignKey(Project,on_delete=models.CASCADE,null=True,blank=True)
+    module_status = models.CharField(
+        max_length=2,
+        choices=MODULE_STATUS_CHOICES,
+        default=1,
+    )
+    added_on = models.DateTimeField(auto_now_add=True,blank=False,null=False)
 
 
 
+class ModuleManagement(models.Model):
 
-    
+    module_mngmnt_key = models.CharField(max_length=25, blank=True, null=True)
+    project = models.ForeignKey(Project, on_delete=models.SET_NULL, blank=True, null=True)
+    module = models.ForeignKey(ProjectModule, on_delete=models.SET_NULL, blank=True, null=True) 
+    added_by = models.CharField(max_length=25, blank=True, null=True)
+    added_on = models.DateTimeField(auto_now_add=True,blank=False,null=False)
+    developer_id = models.ManyToManyField(ExtendedUserModel,related_name='developer_id', blank=True)
+    start_date = models.DateField(blank=True,null=True)
+    end_date = models.DateField(blank=True,null=True)
+    project_assignment = models.ForeignKey(ProjectAssignment, on_delete=models.SET_NULL, blank=True, null=True)
+
 
     
 
