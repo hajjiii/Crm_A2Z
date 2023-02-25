@@ -3,8 +3,8 @@ from django.http import Http404, HttpResponse
 from django.contrib.auth.models import User,auth
 from django.contrib.auth import authenticate , login 
 from django.shortcuts import redirect, render
-from .models import Client, LeadCategory, Project, ProjectAssignment, ProjectModule, State, District,  Leads, LeadSource,ExtendedUserModel , LeadType, LeadStatus 
-from .forms import ClientViewForm, LeadAddForm, LeadEditForm, LeadViewForm, LoginForm, ProjectAssignmentForm, ProjectAssignmnetProjectForm, ProjectModuleForm , StatusEditForm, ClientAddForm, ProjectAddForm, TeamleaderEditForm, TeamleaderViewForm
+from .models import Client, LeadCategory, ModuleManagement, Project, ProjectAssignment, ProjectModule, State, District,  Leads, LeadSource,ExtendedUserModel , LeadType, LeadStatus 
+from .forms import ClientViewForm, LeadAddForm, LeadEditForm, LeadViewForm, LoginForm, ModuleManagementForm, ModuleManagementForm1, ProjectAssignmentForm, ProjectAssignmnetProjectForm, ProjectModuleForm , StatusEditForm, ClientAddForm, ProjectAddForm, TeamleaderEditForm, TeamleaderViewForm
 from email.message import EmailMessage
 from django.http.response import JsonResponse
 from django.contrib.auth import logout
@@ -579,30 +579,34 @@ def prjct_assgnmnt_delete(requesr,id):
 
 
 @login_required
-def project_module_add(request):
-    # qs = Project.objects.get(slug=slug)
+def project_module_add(request,slug):
+    qs = Project.objects.get(slug=slug)
     k = str(time.time()).encode('utf-8')
     h = blake2b(key=k, digest_size=10)
     key = h.hexdigest()
     name = request.user.username
     createdby = ExtendedUserModel.objects.get(user__username = name)
     form = ProjectModuleForm()
+    form2 = ProjectAssignmnetProjectForm(instance=qs)
     if request.method == 'POST':
         form = ProjectModuleForm(request.POST)
         if form.is_valid():
             data = form.save(commit=False)
             data.project_module_key = key
             data.created_by = createdby
-            # data.project = qs
+            data.project = qs
             data.save()
-            return redirect('Crm_app:projectmoduleadd')
+        return redirect('Crm_app:project')
     else:
         form = ProjectModuleForm()
+        qs = Project.objects.get(slug=slug)
+        form2 = ProjectAssignmnetProjectForm(instance=qs)
 
-    qs = ProjectModule.objects.all()
+    qs = ProjectModule.objects.filter(project=qs)
     
     context = {
         'form':form,
+        'form2':form2,
         'qs':qs
         }
     return render(request,'project_module.html',context)
@@ -615,7 +619,7 @@ def project_module_edit(request,id):
         form = ProjectModuleForm(request.POST,instance=qs)
         if form.is_valid():
             form.save()
-            return redirect('Crm_app:projectmoduleadd')
+            return redirect('Crm_app:prjctmodule')
     else:
         qs = ProjectModule.objects.get(id=id)
         form = ProjectModuleForm(instance=qs)
@@ -627,7 +631,7 @@ def project_module_edit(request,id):
 def project_module_delete(request,id):
     qs = ProjectModule.objects.get(id=id)
     qs.delete()
-    return redirect('Crm_app:projectmoduleadd')
+    return redirect('Crm_app:project')
 
 
 @login_required
@@ -640,54 +644,76 @@ def project_module_view(request,id):
     return render(request,'project_module_view.html',context)
 
 
+# -------------------------------------Module Management---------------------------------------
+
+@login_required
+def module_management(request,id):
+    context = {}
+    k = str(time.time()).encode('utf-8')
+    h = blake2b(key=k, digest_size=10)
+    key = h.hexdigest()
+    qs = ProjectModule.objects.get(id=id)
+    project = qs.project
+    name = request.user.username
+    created = ExtendedUserModel.objects.get(user__username = name)
+    print(created)
+    ModuleManagementFormset = modelformset_factory(ModuleManagement,ModuleManagementForm,max_num=1)
+    form = ProjectModuleForm(instance=qs)
+    formset = ModuleManagementFormset(request.POST or None, queryset= qs.module.all(), prefix='module')
+    if request.method == 'POST':
+        if formset.is_valid():
+            for product in formset:
+                d = product.save(commit=False)
+                d.module_mngmnt_key = key
+                d.project = project
+                d.module = qs
+                d.added_by = created    
+                d.save()
+            product.save_m2m()
+
+            return redirect('Crm_app:project')
+
+        else:
+            print(formset.errors)
+    
+    
+    form = ProjectModuleForm(instance=qs)   
+    developers = ProjectAssignment.objects.filter(project_assignment__isnull=False,project=project)
+    print(developers)
+    context = {
+        'formset':formset,       
+        'form':form 
+        }
+    return render(request,'module_mngmnt.html',context)
+
+        
+
+@login_required
+def module_management_delete(request,id):
+    qs = ModuleManagement.objects.get(id=id)
+    qs.delete()
+    return redirect('Crm_app:project')
 
 
+@login_required
+def view_developers_here(request,id):
+    qs = ProjectModule.objects.filter(id=id).first()
+    form = ProjectModuleForm(instance=qs)
+    DevelopersFormset = modelformset_factory(ModuleManagement,ModuleManagementForm1,max_num=1)
+    formset = DevelopersFormset(request.POST or None, queryset= qs.module.all(), prefix='module')
+    dev = ExtendedUserModel.objects.filter(is_teammember='on')
+    for i in dev:
+        print(i)
 
+    # qs1 = ModuleManagement.objects.get(project=qs)
+    # form2 = ModuleManagementForm(instance=qs1)
 
-
-
-
-
-# @login_required
-# def module_assgnmnt_add(request,id):
-#     context = {}
-#     k = str(time.time()).encode('utf-8')
-#     h = blake2b(key=k, digest_size=10)
-#     key = h.hexdigest()
-#     qs = ProjectAssignment.objects.get(id=id)
-#     print(qs)
-#     project_assigned = qs.project_assignment
-#     ModuleAssignmentFormset = modelformset_factory(ModuleManagement,ModuleManagementForm,max_num=1)
-#     form = ProjectAssignmentForm(instance=qs)
-#     formset = ModuleAssignmentFormset(request.POST or None,request.FILES or None, queryset= qs.prjct_assignment.all(), prefix='prjct_assignment')
-#     if request.method == 'POST':
-#         if formset.is_valid():
-#             try:
-#                 with transaction.atomic():
-#                     for module in formset:
-#                         data = module.save(commit=False)
-#                         data.module_management_key = key
-#                         data.project = qs.project
-#                         data.prjct_assignment = qs
-#                         data.save()
-#                     module.save_m2m()
-#             except IntegrityError:
-#                 print("Error Encountered")
-#             return redirect('Crm_app:projectassgnmnt')
-#         else:
-#             print(formset.errors)
-
-#     form = ProjectAssignmentForm(instance=qs) 
-#     context['formset'] = formset
-#     context['form'] = form
-#     return render(request,'module_assignment_add.html',context)
-
-
-
-
-
-
-
+    context = {
+        'form':form,
+        'formset':formset,
+        'dev':dev
+    }
+    return render(request,'view_developers.html',context)
 
 
 
@@ -970,58 +996,7 @@ def staff_login(request):
         message = 'Login failed!'
     else:
         return render(request,'staff_login.html',context={'form': form, 'message': message})
-        # views.py
-# def login_page(request):
-#     form = forms.LoginForm()
-#     message = ''
-#     if request.method == 'POST':
-#         form = forms.LoginForm(request.POST)
-#         if form.is_valid():
-#             user = authenticate(
-#                 username=form.cleaned_data['username'],
-#                 password=form.cleaned_data['password'],
-#             )
-#             if user is not None:
-#                 login(request, user)
-#                 return redirect('home')
-#         message = 'Login failed!'
-#     else:
-#         return render(request,'staff_login.html',context={'form': form, 'message': message})
-
-# def staff_login(request):
-#     if 'username' in request.session:
-#         return redirect('Crm_app:index')
-#     if request.method == "POST":
-#         username = request.POST.get('username')
-#         password = request.POST.get('password')
-#         # print(password)
-#         user = auth.authenticate(username=username,password=password)
-#         if user is not None:
-#             request.session['username'] = username
-#             auth.login(request,user)
-#             print('logged in')
-#             return redirect('Crm_app:index')
-#             # return JsonResponse(
-#             #     {'success':True},
-#             #     safe=False
-#             # )
-#         else:
-#             return render(request,'staff_login.html')
-
-#             # auth.login
-#             # return JsonResponse(
-#             #     {'success':False},
-#             #     safe=False
-#             # )
-#     else:
-#         return render(request,'staff_login.html')
-
-
-# def logout(request):
-#     if 'username' in request.session:
-#         request.session.flush()
-#     return redirect("Crm_app:staff_login")
-
+  
 
 def crm_logout(request):
     logout(request)

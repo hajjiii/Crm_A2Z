@@ -1,4 +1,4 @@
-from .models import LeadCategory, ProjectAssignment, ProjectModule, State, District,  Leads, LeadSource,ExtendedUserModel , LeadType, LeadStatus, Client, Project
+from .models import LeadCategory, ModuleManagement, ProjectAssignment, ProjectModule, State, District,  Leads, LeadSource,ExtendedUserModel , LeadType, LeadStatus, Client, Project
 
 from django import forms
 
@@ -219,12 +219,6 @@ class ProjectAssignmnetProjectForm(forms.ModelForm):
  
        
 
-
-# class UserSelectionForm(forms.Form):
-#     users = forms.ModelMultipleChoiceField(
-#     queryset=User.objects.all(),
-#     widget=forms.CheckboxSelectMultiple
-#     )
 from django.contrib.auth.models import User
 
 class ProjectAssignmentForm(forms.ModelForm):
@@ -252,8 +246,31 @@ class ProjectModuleForm(forms.ModelForm):
         }
 
 
+class ModuleManagementForm(forms.ModelForm):
+    # developer_id = forms.ModelMultipleChoiceField(queryset = ExtendedUserModel.objects.filter(is_teammember='on'), widget  = forms.CheckboxSelectMultiple)
+    # developer = forms.ModelMultipleChoiceField(queryset = ProjectAssignment.objects.filter(project_assignment__isnull=False), widget  = forms.CheckboxSelectMultiple)
+    class Meta:
+        model = ModuleManagement
+        fields = "__all__"
+        exclude = ['module_mngmnt_key','project','module','added_by','added_on','project_assignment','start_date','end_date','developer_id']
+        # widgets={
+        #     'start_date': forms.DateInput(attrs={'class': 'form-control','type': 'date'}),
+        #     'end_date': forms.DateInput(attrs={'class': 'form-control','type': 'date'}),
 
+            
+        # }
 
+class ModuleManagementForm1(forms.ModelForm):
+    class Meta:
+        model = ModuleManagement
+        fields = "__all__"
+        exclude = ['module_mngmnt_key','project','module','added_by','added_on','project_assignment','developer_id']
+        widgets={
+            'start_date': forms.DateInput(attrs={'class': 'form-control','type': 'date'}),
+            'end_date': forms.DateInput(attrs={'class': 'form-control','type': 'date'}),
+
+            
+        }
 
 
 

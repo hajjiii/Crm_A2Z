@@ -71,10 +71,14 @@ urlpatterns = [
 
 # ---------------------------------------------------------------------------------------------------
     # path('module-assgnmnt-add/<int:id>',views.module_assgnmnt_add,name='add_module_assgnmnt'),
-    path('project-module-add/',views.project_module_add,name='projectmoduleadd'),
+    path('project-module-add/<slug:slug>',views.project_module_add,name='prjctmodule'),
     path('project-module-delete/<int:id>',views.project_module_delete,name='deleteprjctmodule'),
     path('project-module-edit/<int:id>',views.project_module_edit,name='editprjctmodule'),
     path('project-module-view/<int:id>',views.project_module_view,name='viewprjctmodule'),
+    path('module-mngmnt/<int:id>',views.module_management,name='modulemngmnt'),
+    path('module-mngmnt-delete/<int:id>',views.module_management_delete,name='deletemodulemngmnt'),
+    path('view-developers/<int:id>',views.view_developers_here,name='viewdevelopers'),
+
 
 
 

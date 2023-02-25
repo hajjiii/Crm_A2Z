@@ -1513,7 +1513,7 @@
                                                                                     <td data-column-id="country" class="gridjs-td text-center"><a href="{% url 'Crm_app:viewproject' i.slug %}"><i class="fas fa-eye"></i></a></td>
                                                                                     {% if user.is_authenticated and user.extendedusermodel.is_teamleader %}
                                                                                         <td data-column-id="country" class="gridjs-td text-center"><a href="{% url 'Crm_app:prjctassignmnt' i.slug %}"><i class="fa-solid fa-list-check"></i></a></td>
-                                                                                        <td data-column-id="country" class="gridjs-td text-center"><a href="{% url 'Crm_app:projectmoduleadd'  %}"><i class="fa fa-plus"></i></a></td>
+                                                                                        <td data-column-id="country" class="gridjs-td text-center"><a href="{% url 'Crm_app:prjctmodule' i.slug %}"><i class="fa fa-plus"></i></a></td>
                                                                                     {% endif %}
 
                                                                                     {% comment %} <td data-column-id="position" class="gridjs-td"><textarea disabled cols="18">{{i.address}}</textarea></td> {% endcomment %}

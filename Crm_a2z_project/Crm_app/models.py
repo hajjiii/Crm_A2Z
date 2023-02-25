@@ -411,7 +411,7 @@ class ProjectModule(models.Model):
     module_description = models.TextField(max_length=250, blank=True, null=True)
     # created_by = models.ForeignKey(ExtendedUserModel,on_delete=models.CASCADE,null=True,blank=True)
     created_by = models.CharField(max_length=25, blank=True, null=True)
-    project = models.ForeignKey(Project,on_delete=models.CASCADE,null=True,blank=True)
+    project = models.ForeignKey(Project,on_delete=models.SET_NULL,null=True,blank=True,related_name='projectmodule')
     module_status = models.CharField(
         max_length=2,
         choices=MODULE_STATUS_CHOICES,
@@ -422,13 +422,16 @@ class ProjectModule(models.Model):
 
 
 class ModuleManagement(models.Model):
+    def __str__(self):
+        return self.module.module_title
 
     module_mngmnt_key = models.CharField(max_length=25, blank=True, null=True)
-    project = models.ForeignKey(Project, on_delete=models.SET_NULL, blank=True, null=True)
-    module = models.ForeignKey(ProjectModule, on_delete=models.SET_NULL, blank=True, null=True) 
-    added_by = models.CharField(max_length=25, blank=True, null=True)
+    project = models.ForeignKey(Project, on_delete=models.SET_NULL, blank=True, related_name='developers',null=True)
+    module = models.ForeignKey(ProjectModule, on_delete=models.SET_NULL,related_name='module',blank=True, null=True) 
+    added_by = models.ForeignKey(ExtendedUserModel,on_delete=models.SET_NULL,max_length=25, blank=True, null=True)
     added_on = models.DateTimeField(auto_now_add=True,blank=False,null=False)
     developer_id = models.ManyToManyField(ExtendedUserModel,related_name='developer_id', blank=True)
+    # developer = models.ManyToManyField(ProjectAssignment,related_name='developer', blank=True)
     start_date = models.DateField(blank=True,null=True)
     end_date = models.DateField(blank=True,null=True)
     project_assignment = models.ForeignKey(ProjectAssignment, on_delete=models.SET_NULL, blank=True, null=True)
