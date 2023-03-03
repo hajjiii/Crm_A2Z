@@ -649,17 +649,24 @@ def project_module_view(request,id):
 @login_required
 def module_management(request,id):
     context = {}
+
     k = str(time.time()).encode('utf-8')
     h = blake2b(key=k, digest_size=10)
     key = h.hexdigest()
     qs = ProjectModule.objects.get(id=id)
     project = qs.project
+    team = ExtendedUserModel.objects.filter(is_teammember='on')
+    developer = ProjectAssignment.objects.filter(project=project)
+    print(developer)
+    dev = request.POST.getlist('developer')
+    print(dev)
     name = request.user.username
     created = ExtendedUserModel.objects.get(user__username = name)
     print(created)
     ModuleManagementFormset = modelformset_factory(ModuleManagement,ModuleManagementForm,max_num=1)
     form = ProjectModuleForm(instance=qs)
-    formset = ModuleManagementFormset(request.POST or None, queryset= qs.module.all(), prefix='module')
+    # form_kwargs={'developer': developer}
+    formset = ModuleManagementFormset(request.POST or None,queryset= qs.module.all(), prefix='module')
     if request.method == 'POST':
         if formset.is_valid():
             for product in formset:
@@ -667,8 +674,13 @@ def module_management(request,id):
                 d.module_mngmnt_key = key
                 d.project = project
                 d.module = qs
-                d.added_by = created    
+                d.added_by = created                  
                 d.save()
+                dev = request.POST.getlist('developer')
+                developer = d.developer.add(*dev)
+                # for i in dev:
+                #     d.developer.add(i)
+                print(request.POST)
             product.save_m2m()
 
             return redirect('Crm_app:project')
@@ -678,9 +690,10 @@ def module_management(request,id):
     
     
     form = ProjectModuleForm(instance=qs)   
-    developers = ProjectAssignment.objects.filter(project_assignment__isnull=False,project=project)
-    print(developers)
+    # developers = ProjectAssignment.objects.filter(project_assignment__isnull=False,project=project)
+    # print(developers)
     context = {
+        'developer': developer,
         'formset':formset,       
         'form':form 
         }

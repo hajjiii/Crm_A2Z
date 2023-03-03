@@ -248,17 +248,17 @@ class ProjectModuleForm(forms.ModelForm):
 
 class ModuleManagementForm(forms.ModelForm):
     # developer_id = forms.ModelMultipleChoiceField(queryset = ExtendedUserModel.objects.filter(is_teammember='on'), widget  = forms.CheckboxSelectMultiple)
-    # developer = forms.ModelMultipleChoiceField(queryset = ProjectAssignment.objects.filter(project_assignment__isnull=False), widget  = forms.CheckboxSelectMultiple)
+    # developer = forms.ModelMultipleChoiceField(queryset = None, widget  = forms.CheckboxSelectMultiple)
     class Meta:
         model = ModuleManagement
         fields = "__all__"
-        exclude = ['module_mngmnt_key','project','module','added_by','added_on','project_assignment','start_date','end_date','developer_id']
-        # widgets={
-        #     'start_date': forms.DateInput(attrs={'class': 'form-control','type': 'date'}),
-        #     'end_date': forms.DateInput(attrs={'class': 'form-control','type': 'date'}),
-
-            
-        # }
+        exclude = ['module_mngmnt_key','project','module','added_by','added_on','project_assignment','start_date','end_date','developer_id','developer']
+    
+    
+    # def __init__(self, *args, **kwargs):
+    #     queryset = kwargs.pop('developer')
+    #     super(ModuleManagementForm, self).__init__(*args, **kwargs)
+    #     self.fields['developer'].queryset = queryset
 
 class ModuleManagementForm1(forms.ModelForm):
     class Meta:

@@ -389,19 +389,6 @@ class ProjectAssignment(models.Model):
     # project_end_date =
 
 
-# class ModuleManagement(models.Model):
-#     def __str__(self):
-#         return self.module_name
-        
-#     module_management_key = models.CharField(max_length=25, blank=True, null=True)
-#     module_name = models.CharField(max_length=30, blank=True, null=True)
-#     module_description = models.TextField(max_length=250, blank=True, null=True)
-#     module_start_date = models.DateField(blank=True,null=True)
-#     project = models.ForeignKey(Project,blank=True,null=True,on_delete=models.SET_NULL)
-#     prjct_assignment = models.ForeignKey(ProjectAssignment,related_name = "prjct_assignment",blank=True,null=True,on_delete=models.SET_NULL)
-#     module_assigned =  models.ManyToManyField(ExtendedUserModel,blank=True,null=True,related_name='module_assigned')
-
-
 class ProjectModule(models.Model):
     def __str__(self):
         return self.module_title
@@ -430,8 +417,7 @@ class ModuleManagement(models.Model):
     module = models.ForeignKey(ProjectModule, on_delete=models.SET_NULL,related_name='module',blank=True, null=True) 
     added_by = models.ForeignKey(ExtendedUserModel,on_delete=models.SET_NULL,max_length=25, blank=True, null=True)
     added_on = models.DateTimeField(auto_now_add=True,blank=False,null=False)
-    developer_id = models.ManyToManyField(ExtendedUserModel,related_name='developer_id', blank=True)
-    # developer = models.ManyToManyField(ProjectAssignment,related_name='developer', blank=True)
+    developer = models.ManyToManyField(ProjectAssignment,related_name='developer', blank=True)
     start_date = models.DateField(blank=True,null=True)
     end_date = models.DateField(blank=True,null=True)
     project_assignment = models.ForeignKey(ProjectAssignment, on_delete=models.SET_NULL, blank=True, null=True)
