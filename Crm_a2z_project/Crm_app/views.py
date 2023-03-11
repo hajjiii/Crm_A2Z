@@ -4,7 +4,7 @@ from django.contrib.auth.models import User,auth
 from django.contrib.auth import authenticate , login 
 from django.shortcuts import redirect, render
 from .models import Client, LeadCategory, ModuleManagement, Project, ProjectAssignment, ProjectModule, State, District,  Leads, LeadSource,ExtendedUserModel , LeadType, LeadStatus 
-from .forms import ClientViewForm, LeadAddForm, LeadEditForm, LeadViewForm, LoginForm, ModuleManagementForm, ModuleManagementForm1, ProjectAssignmentForm, ProjectAssignmnetProjectForm, ProjectModuleForm , StatusEditForm, ClientAddForm, ProjectAddForm, TeamleaderEditForm, TeamleaderViewForm
+from .forms import ClientViewForm, LeadAddForm, LeadEditForm, LeadViewForm, LoginForm, ModuleManagementForm,  ProjectAssignmentForm, ProjectAssignmnetProjectForm, ProjectModuleForm , StatusEditForm, ClientAddForm, ProjectAddForm, TeamleaderEditForm, TeamleaderViewForm
 from email.message import EmailMessage
 from django.http.response import JsonResponse
 from django.contrib.auth import logout
@@ -658,15 +658,14 @@ def module_management(request,id):
     team = ExtendedUserModel.objects.filter(is_teammember='on')
     developer = ProjectAssignment.objects.filter(project=project)
     print(developer)
-    dev = request.POST.getlist('developer')
-    print(dev)
+   
     name = request.user.username
     created = ExtendedUserModel.objects.get(user__username = name)
     print(created)
     ModuleManagementFormset = modelformset_factory(ModuleManagement,ModuleManagementForm,max_num=1)
     form = ProjectModuleForm(instance=qs)
     # form_kwargs={'developer': developer}
-    formset = ModuleManagementFormset(request.POST or None,queryset= qs.module.all(), prefix='module')
+    formset = ModuleManagementFormset(request.POST or None,queryset= qs.module.all(), form_kwargs={'developer': developer}, prefix='module')
     if request.method == 'POST':
         if formset.is_valid():
             for product in formset:
@@ -676,10 +675,7 @@ def module_management(request,id):
                 d.module = qs
                 d.added_by = created                  
                 d.save()
-                dev = request.POST.getlist('developer')
-                developer = d.developer.add(*dev)
-                # for i in dev:
-                #     d.developer.add(i)
+               
                 print(request.POST)
             product.save_m2m()
 
@@ -708,25 +704,25 @@ def module_management_delete(request,id):
     return redirect('Crm_app:project')
 
 
-@login_required
-def view_developers_here(request,id):
-    qs = ProjectModule.objects.filter(id=id).first()
-    form = ProjectModuleForm(instance=qs)
-    DevelopersFormset = modelformset_factory(ModuleManagement,ModuleManagementForm1,max_num=1)
-    formset = DevelopersFormset(request.POST or None, queryset= qs.module.all(), prefix='module')
-    dev = ExtendedUserModel.objects.filter(is_teammember='on')
-    for i in dev:
-        print(i)
+# @login_required
+# def view_developers_here(request,id):
+#     qs = ProjectModule.objects.filter(id=id).first()
+#     form = ProjectModuleForm(instance=qs)
+#     DevelopersFormset = modelformset_factory(ModuleManagement,ModuleManagementForm1,max_num=1)
+#     formset = DevelopersFormset(request.POST or None, queryset= qs.module.all(), prefix='module')
+#     dev = ExtendedUserModel.objects.filter(is_teammember='on')
+#     for i in dev:
+#         print(i)
 
-    # qs1 = ModuleManagement.objects.get(project=qs)
-    # form2 = ModuleManagementForm(instance=qs1)
+#     # qs1 = ModuleManagement.objects.get(project=qs)
+#     # form2 = ModuleManagementForm(instance=qs1)
 
-    context = {
-        'form':form,
-        'formset':formset,
-        'dev':dev
-    }
-    return render(request,'view_developers.html',context)
+#     context = {
+#         'form':form,
+#         'formset':formset,
+#         'dev':dev
+#     }
+#     return render(request,'view_developers.html',context)
 
 
 

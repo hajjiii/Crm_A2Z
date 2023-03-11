@@ -77,7 +77,7 @@ urlpatterns = [
     path('project-module-view/<int:id>',views.project_module_view,name='viewprjctmodule'),
     path('module-mngmnt/<int:id>',views.module_management,name='modulemngmnt'),
     path('module-mngmnt-delete/<int:id>',views.module_management_delete,name='deletemodulemngmnt'),
-    path('view-developers/<int:id>',views.view_developers_here,name='viewdevelopers'),
+    # path('view-developers/<int:id>',views.view_developers_here,name='viewdevelopers'),
 
 
 

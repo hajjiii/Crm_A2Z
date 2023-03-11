@@ -248,52 +248,28 @@ class ProjectModuleForm(forms.ModelForm):
 
 class ModuleManagementForm(forms.ModelForm):
     # developer_id = forms.ModelMultipleChoiceField(queryset = ExtendedUserModel.objects.filter(is_teammember='on'), widget  = forms.CheckboxSelectMultiple)
-    # developer = forms.ModelMultipleChoiceField(queryset = None, widget  = forms.CheckboxSelectMultiple)
+    developer = forms.ModelMultipleChoiceField(queryset = None, widget  = forms.CheckboxSelectMultiple)
     class Meta:
         model = ModuleManagement
         fields = "__all__"
-        exclude = ['module_mngmnt_key','project','module','added_by','added_on','project_assignment','start_date','end_date','developer_id','developer']
-    
-    
-    # def __init__(self, *args, **kwargs):
-    #     queryset = kwargs.pop('developer')
-    #     super(ModuleManagementForm, self).__init__(*args, **kwargs)
-    #     self.fields['developer'].queryset = queryset
-
-class ModuleManagementForm1(forms.ModelForm):
-    class Meta:
-        model = ModuleManagement
-        fields = "__all__"
-        exclude = ['module_mngmnt_key','project','module','added_by','added_on','project_assignment','developer_id']
+        exclude = ['module_mngmnt_key','project','module','added_by','added_on','project_assignment']
         widgets={
             'start_date': forms.DateInput(attrs={'class': 'form-control','type': 'date'}),
             'end_date': forms.DateInput(attrs={'class': 'form-control','type': 'date'}),
 
             
         }
+    
+    def __init__(self, *args, **kwargs):
+        developer = kwargs.pop('developer')
+        super(ModuleManagementForm, self).__init__(*args, **kwargs)
+        # self.fields['developer'].queryset = developer
+        for i in developer:
+            self.fields['developer'].queryset = i.project_assignment.all()
 
 
 
-
-
-
-
-
-# class ModuleManagementForm(forms.ModelForm):
-#     module_assigned = forms.ModelMultipleChoiceField(queryset = ExtendedUserModel.objects.filter(is_teammember='on') , widget  = forms.CheckboxSelectMultiple)
-#     class Meta:
-#         model = ModuleManagement
-#         fields="__all__"
-#         exclude =['module_management_key','project','prjct_assignment']
-#         widgets = {
-#             'module_name' : forms.TextInput(attrs={'class':'form-control'}),
-#             'module_description' : forms.Textarea(attrs={'class':'form-control','rows':'3'}),
-#             'module_start_date': forms.DateInput(attrs={'class': 'form-control','type': 'date'}),
-
-#         }
-
-
-
+        
 
 class TeamleaderViewForm(forms.ModelForm):
    

@@ -673,31 +673,36 @@
                                                            
                                                             <table class="table table-responsive table-borderless table-lg">
                                                                 <thead class="text-center">
-                                                                <tr>
-                                                                    <th>Team Members:</th>
-                                                                    {% comment %} <th>Start Date:</th>
-                                                                    <th>End Date:</th> {% endcomment %}
-                                                                </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                
-                                                                {{formset.management_form}}
-                                                                {% for form_2 in formset %}
-                                                                {%for prjcts in developer%}
-                                                                {% for i in prjcts.project_assignment.all%}
-                                                                <tr class="item">
-                                                                    <td  style="width:165px">
-                                                                    <input type="checkbox"  name="developer" value="{{i.id}}">
-                                                                        {{i}}
-                                                                    </input>
-                                                                       {% comment %} {{form_2.developer}}    {% endcomment %}
-                                                                    </td>  
+                                                                    <tr>
+                                                                        <th>Team Members:</th>
+                                                                        <th>Start Date:</th>
+                                                                        <th>End Date:</th>
+                                                                        {% comment %} <th>Start Date:</th>
+                                                                        <th>End Date:</th> {% endcomment %}
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    
+                                                                    {{formset.management_form}}
+                                                                    {% for form_2 in formset %}
                                                                    
-                                                                   
-                                                                </tr>
+                                                                    <tr class="item">
+                                                                        <td  style="width:165px">
+                                                                        
+                                                                           {{form_2.developer}}   
+                                                                        </td>  
+                                                                       
+                                                                        <td  style="width:165px" >
+                                                                            {{form_2.start_date}}
+                                                                        </td>
+                                                                        <td  style="width:165px">
+                                                                            {{form_2.end_date}}
+                                                                        </td>
+                                                                       
+                                                                       
+                                                                    </tr>
                                                                 {% endfor %}
-                                                                {% endfor %}
-                                                                {% endfor %}
+                                                               
                                                                
                                                                 </tbody>
                                                             </table>
