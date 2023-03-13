@@ -247,12 +247,11 @@ class ProjectModuleForm(forms.ModelForm):
 
 
 class ModuleManagementForm(forms.ModelForm):
-    # developer_id = forms.ModelMultipleChoiceField(queryset = ExtendedUserModel.objects.filter(is_teammember='on'), widget  = forms.CheckboxSelectMultiple)
     developer = forms.ModelMultipleChoiceField(queryset = None, widget  = forms.CheckboxSelectMultiple)
     class Meta:
         model = ModuleManagement
         fields = "__all__"
-        exclude = ['module_mngmnt_key','project','module','added_by','added_on','project_assignment']
+        exclude = ['module_mngmnt_key','project','module','added_by','added_on']
         widgets={
             'start_date': forms.DateInput(attrs={'class': 'form-control','type': 'date'}),
             'end_date': forms.DateInput(attrs={'class': 'form-control','type': 'date'}),

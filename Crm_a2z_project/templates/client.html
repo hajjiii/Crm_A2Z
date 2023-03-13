@@ -1492,7 +1492,7 @@
                                                                                     <td data-column-id="name" class="gridjs-td text-center">{{i.business_name}}</a></td>
                                                                                     <td data-column-id="country" class="gridjs-td text-center">{{i.contact_person_phone_no}}</td>
                                                                                     <td data-column-id="country" class="gridjs-td text-center">
-                                                                                        {% for pr in i.project_set.all %}
+                                                                                        {% for pr in i.clientproject.all %}
                                                                                             {{pr.project_title}}<b>,</b>
                                                                                         {% endfor %}
                                                                                     </td>
@@ -1770,14 +1770,12 @@
                     $("#id_district").html(data);  // replace the contents of the city input with the data that came from the server
 
                     /*
-
                     let html_data = '<option value="">---------</option>';
                     data.forEach(function (city) {
                         html_data += `<option value="${city.id}">${city.name}</option>`
                     });
                     console.log(html_data);
                     $("#id_city").html(html_data);
-
                     */
                 }
             });

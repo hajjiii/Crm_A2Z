@@ -307,6 +307,8 @@ def telecaller(request):
 
 @login_required
 def client_add(request):
+
+
     k = str(time.time()).encode('utf-8')
     h = blake2b(key=k, digest_size=10)
     key = h.hexdigest()
@@ -330,6 +332,8 @@ def client_add(request):
         
         }
     return render(request,'client.html',context)
+
+
 
 
 @login_required
@@ -364,7 +368,8 @@ def client_edit(request,slug):
 
 @login_required
 def project_add(request):   
-    d =[]
+    
+    user_modules = []
     k = str(time.time()).encode('utf-8')
     h = blake2b(key=k, digest_size=10)
     key = h.hexdigest()
@@ -407,8 +412,19 @@ def project_add(request):
         obj1 = Leads.objects.filter(lead_statuss__name = 'ConvertToProject') 
         filters1 = LeadsFilter(request.GET,queryset=obj1)  
         all_project = ProjectAssignment.objects.filter(project_assignment__user__username=request.user.username)
+        # print(all_project)
+        # for i in all_project:
+        #     pr.append(i.project.project_title)
+        for i in all_project:
+            for pr in i.project.projectmodule.all():
+                for module in pr.module.filter(developer__user__username=request.user.username):
+                    user_modules.append(module)   
+        print(user_modules)             
+                                                                                        
+            # print('hey',i.prjctasgnmnt)
+        module = ModuleManagement.objects.filter(developer__user__username = request.user.username)
         filters = ProjectFilter(request.GET,queryset=all_project)
-        return render(request,'project.html',{'all_project':all_project,'form':form,'clients':clients,'obj1':obj1,'filters':filters,'filters1':filters1})
+        return render(request,'project.html',{'all_project':all_project,'form':form,'clients':clients,'obj1':obj1,'filters':filters,'filters1':filters1,'module':module,'user':request.user, 'user_modules': user_modules})
     elif request.user.extendedusermodel.is_telecallers:
         obj1 = Leads.objects.filter(lead_statuss__name = 'ConvertToProject')  
         filters1 = LeadsFilter(request.GET,queryset=obj1)  
@@ -649,16 +665,20 @@ def project_module_view(request,id):
 @login_required
 def module_management(request,id):
     context = {}
-
+    d = []
     k = str(time.time()).encode('utf-8')
     h = blake2b(key=k, digest_size=10)
     key = h.hexdigest()
     qs = ProjectModule.objects.get(id=id)
     project = qs.project
+    # asignment = project.products.all()
     team = ExtendedUserModel.objects.filter(is_teammember='on')
     developer = ProjectAssignment.objects.filter(project=project)
     print(developer)
-   
+    for i in developer:
+        for project_assignment in i.project_assignment.all():
+            print('hry grl',project_assignment)
+    
     name = request.user.username
     created = ExtendedUserModel.objects.get(user__username = name)
     print(created)
@@ -673,9 +693,8 @@ def module_management(request,id):
                 d.module_mngmnt_key = key
                 d.project = project
                 d.module = qs
-                d.added_by = created                  
+                d.added_by = created 
                 d.save()
-               
                 print(request.POST)
             product.save_m2m()
 
@@ -723,10 +742,6 @@ def module_management_delete(request,id):
 #         'dev':dev
 #     }
 #     return render(request,'view_developers.html',context)
-
-
-
-
 
 
 

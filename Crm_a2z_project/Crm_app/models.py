@@ -243,7 +243,7 @@ class Project(models.Model):
         return self.project_title
     p_key = models.CharField(max_length=25, blank=True, null=True)
     slug = models.SlugField(max_length=250, blank=True, null=True)
-    client = models.ForeignKey(Client, on_delete=models.SET_NULL, blank=True, null=True,)
+    client = models.ForeignKey(Client, on_delete=models.SET_NULL, blank=True, null=True,related_name='clientproject')
     project_title = models.CharField(max_length=30, blank=True, null=True,verbose_name='Title')
     requirements =  models.TextField(blank=True,null=True)
     category = models.ForeignKey(LeadCategory,on_delete=models.SET_NULL, blank=True, null=True)
@@ -420,7 +420,7 @@ class ModuleManagement(models.Model):
     developer = models.ManyToManyField(ExtendedUserModel,related_name='developer', blank=True)
     start_date = models.DateField(blank=True,null=True)
     end_date = models.DateField(blank=True,null=True)
-    project_assignment = models.ForeignKey(ProjectAssignment, on_delete=models.SET_NULL, blank=True, null=True)
+    project_assignment = models.ForeignKey(ProjectAssignment, on_delete=models.SET_NULL,related_name='prjctasgnmnt', blank=True, null=True)
 
 
     
