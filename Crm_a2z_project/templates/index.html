@@ -460,6 +460,16 @@
 
                         
                             </li> 
+                            {% if user.is_authenticated and user.extendedusermodel.is_teammember %}
+                            <li>
+                                <a href="{% url 'Crm_app:project_asigned' %}">
+                                   <i class='bx bxs-grid'></i>
+                                    <span key="t-apps">Module</span>
+                                </a>
+
+                        
+                            </li> 
+                            {% endif %}
 
 
                             

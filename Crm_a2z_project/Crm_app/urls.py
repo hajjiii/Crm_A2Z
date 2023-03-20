@@ -52,6 +52,8 @@ urlpatterns = [
 
     # -----------------------------------------------------------
     path('add-project',views.project_add, name='project'),
+    path('project-assigned',views.assigned_poject, name='project_asigned'),
+
     path('project-view/<slug:slug>',views.project_view,name='viewproject'),
     path('project-edit/<slug:slug>',views.project_edit,name='editproject'),
     path('project-delete/<slug:slug>',views.project_delete,name='deleteproject'),
@@ -77,7 +79,6 @@ urlpatterns = [
     path('project-module-view/<int:id>',views.project_module_view,name='viewprjctmodule'),
     path('module-mngmnt/<int:id>',views.module_management,name='modulemngmnt'),
     path('module-mngmnt-delete/<int:id>',views.module_management_delete,name='deletemodulemngmnt'),
-    # path('view-developers/<int:id>',views.view_developers_here,name='viewdevelopers'),
 
 
 

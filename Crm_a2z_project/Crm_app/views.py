@@ -364,7 +364,7 @@ def client_edit(request,slug):
         form = ClientViewForm(instance=qs)
     return render(request,'client_edit.html',{'form':form})
         
-
+from django.db.models import Q
 
 @login_required
 def project_add(request):   
@@ -410,21 +410,24 @@ def project_add(request):
     elif request.user.extendedusermodel.is_teammember:
         user = request.user.extendedusermodel.employe_name
         obj1 = Leads.objects.filter(lead_statuss__name = 'ConvertToProject') 
-        filters1 = LeadsFilter(request.GET,queryset=obj1)  
+        filters1 = LeadsFilter(request.GET,queryset=obj1) 
         all_project = ProjectAssignment.objects.filter(project_assignment__user__username=request.user.username)
-        # print(all_project)
-        # for i in all_project:
-        #     pr.append(i.project.project_title)
-        for i in all_project:
-            for pr in i.project.projectmodule.all():
-                for module in pr.module.filter(developer__user__username=request.user.username):
-                    user_modules.append(module)   
-        print(user_modules)             
+        print(all_project)
+        all_module = ModuleManagement.objects.filter(developer__user__username=request.user.username,project_assignment__project_assignment__user__username=request.user.username)
+        print(all_module)
+      
+       
+   
+            # for pr in i.project.projectmodule.all():
+            #     print('asigned',pr)
+            #     for module in pr.module.all():
+            #         user_modules.append(module)   
+                
                                                                                         
             # print('hey',i.prjctasgnmnt)
         module = ModuleManagement.objects.filter(developer__user__username = request.user.username)
         filters = ProjectFilter(request.GET,queryset=all_project)
-        return render(request,'project.html',{'all_project':all_project,'form':form,'clients':clients,'obj1':obj1,'filters':filters,'filters1':filters1,'module':module,'user':request.user, 'user_modules': user_modules})
+        return render(request,'project.html',{'all_project':all_project,'form':form,'clients':clients,'obj1':obj1,'filters':filters,'filters1':filters1,'module':module,'request':request, 'user_modules': user_modules,'all_module':all_module})
     elif request.user.extendedusermodel.is_telecallers:
         obj1 = Leads.objects.filter(lead_statuss__name = 'ConvertToProject')  
         filters1 = LeadsFilter(request.GET,queryset=obj1)  
@@ -460,6 +463,15 @@ def project_add(request):
     #     'form':form,
     #     }
     # return render(request,'project.html',context)
+
+def assigned_poject(request):
+    all_project = ModuleManagement.objects.filter(developer__user__username=request.user.username,project_assignment__project_assignment__user__username=request.user.username)
+    context = {
+        'all_project' : all_project
+    }
+    return render(request,'project_asigned.html',context)
+
+
             
 @login_required
 def project_view(request,slug):
@@ -628,6 +640,25 @@ def project_module_add(request,slug):
     return render(request,'project_module.html',context)
 
 
+
+# def view_module(request,slug):
+#     qs = Project.objects.get(slug=slug)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @login_required
 def project_module_edit(request,id):
     if request.method == 'POST':
@@ -669,10 +700,13 @@ def module_management(request,id):
     k = str(time.time()).encode('utf-8')
     h = blake2b(key=k, digest_size=10)
     key = h.hexdigest()
-    qs = ProjectModule.objects.get(id=id)
+    qs = ProjectModule.objects.get(id=id)  
+    print('qs',qs)
     project = qs.project
-    # asignment = project.products.all()
+    projects = qs.project.products.all()
+    print('project',projects)
     team = ExtendedUserModel.objects.filter(is_teammember='on')
+    developerr = ProjectAssignment.objects.filter(project=project).first()
     developer = ProjectAssignment.objects.filter(project=project)
     print(developer)
     for i in developer:
@@ -694,6 +728,7 @@ def module_management(request,id):
                 d.project = project
                 d.module = qs
                 d.added_by = created 
+                d.project_assignment = developerr
                 d.save()
                 print(request.POST)
             product.save_m2m()
