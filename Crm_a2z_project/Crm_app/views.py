@@ -32,19 +32,22 @@ from .filters import ClientFilter, LeadsFilter, ProjectFilter
 # Create your views here.
 @login_required
 def index(request):
-    total_leads_count = Leads.objects.exclude(lead_statuss__name='ConvertToProject').count()
-    today_leads_count = Leads.objects.filter(actual_date_added_on__contains=datetime.datetime.today().date()).count()
-    total_closed_count = Leads.objects.filter(lead_statuss__name='ClosedLead').count()
-    today_closed_leads_count = Leads.objects.filter(lead_statuss__name='ClosedLead',actual_date_added_on__contains=datetime.datetime.today().date()).count()
+    if 'username' in request.session:
+        total_leads_count = Leads.objects.exclude(lead_statuss__name='ConvertToProject').count()
+        today_leads_count = Leads.objects.filter(actual_date_added_on__contains=datetime.datetime.today().date()).count()
+        total_closed_count = Leads.objects.filter(lead_statuss__name='ClosedLead').count()
+        today_closed_leads_count = Leads.objects.filter(lead_statuss__name='ClosedLead',actual_date_added_on__contains=datetime.datetime.today().date()).count()
 
-    context = {
-        'total_leads_count':total_leads_count,
-        'today_leads_count':today_leads_count,
-        'total_closed_count':total_closed_count,
-        'today_closed_leads_count':today_closed_leads_count
- 
-    }
-    return render(request,'index.html',context)
+        context = {
+            'total_leads_count':total_leads_count,
+            'today_leads_count':today_leads_count,
+            'total_closed_count':total_closed_count,
+            'today_closed_leads_count':today_closed_leads_count
+    
+        }
+        return render(request,'index.html',context)
+    else:
+        return redirect('Crm_app:staff_login')
 
 
 @login_required
@@ -1026,6 +1029,8 @@ def register(request):
 
 
 def staff_login(request):
+    if 'username' in request.session:
+        return redirect('Crm_app:index')
     form = LoginForm()
     message = ''
     if request.method == 'POST':
@@ -1058,8 +1063,9 @@ def staff_login(request):
   
 
 def crm_logout(request):
-    logout(request)
-    # messages.info(request, "Logged out successfully!")
+    if 'username' in request.session:
+        request.session.flush();
+    # logout(request)
+    # # messages.info(request, "Logged out successfully!")
     return redirect("Crm_app:staff_login")
     
-
